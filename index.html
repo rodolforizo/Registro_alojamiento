@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Registro de Ocupación - Alojamientos Catamarca</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background: #eef2f5;
+            padding: 2rem 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Tarjeta principal */
+        .form-container {
+            max-width: 680px;
+            width: 100%;
+            margin: 0 auto;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        /* Encabezado con logo */
+        .header-logo {
+            background: #ffffff;
+            padding: 1.5rem 1.8rem 0.8rem 1.8rem;
+            border-bottom: 1px solid #e9edf2;
+            text-align: center;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo-gobierno {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #f9fafc;
+            padding: 6px 16px 6px 12px;
+            border-radius: 60px;
+        }
+
+        .logo-imagen {
+            height: 55px;
+            width: auto;
+            max-width: 120px;
+            object-fit: contain;
+        }
+
+        .ministerio-text {
+            text-align: right;
+            font-size: 0.8rem;
+            line-height: 1.3;
+            color: #1e3a5f;
+        }
+
+        .ministerio-text strong {
+            font-size: 0.9rem;
+            display: block;
+            font-weight: 600;
+        }
+
+        .badge-catamarca {
+            background: #2b5e3b;
+            color: white;
+            padding: 4px 14px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1e2f3e;
+            margin: 0.75rem 0 0.2rem 0;
+        }
+
+        .subtitulo {
+            color: #5b6f82;
+            font-size: 0.85rem;
+            margin-bottom: 0.25rem;
+        }
+
+        /* cuerpo del formulario */
+        .form-body {
+            padding: 1.8rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            font-size: 0.85rem;
+            margin-bottom: 0.4rem;
+            color: #1f3b4c;
+            letter-spacing: -0.2px;
+        }
+
+        .label-required {
+            color: #c2410c;
+            font-size: 0.7rem;
+            font-weight: normal;
+        }
+
+        .search-wrapper {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 12px 14px;
+            font-size: 0.95rem;
+            border: 1px solid #cfdde6;
+            border-radius: 18px;
+            background: #ffffff;
+            transition: 0.2s;
+            outline: none;
+        }
+
+        select:focus, input:focus {
+            border-color: #2b7a4b;
+            box-shadow: 0 0 0 3px rgba(43, 122, 75, 0.15);
+        }
+
+        .btn-buscar {
+            background: #1e4663;
+            color: white;
+            border: none;
+            padding: 0 1.6rem;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.2s;
+            white-space: nowrap;
+            height: 46px;
+        }
+
+        .btn-buscar:hover {
+            background: #0f2f46;
+        }
+
+        .info-alojamiento {
+            background: #f8fafd;
+            border-radius: 24px;
+            padding: 0.2rem 1rem 1rem 1rem;
+            margin-top: 0.8rem;
+            border: 1px solid #e2edf2;
+        }
+
+        .campo-auto {
+            margin: 0.8rem 0;
+        }
+
+        .campo-auto label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #4b6a7c;
+            margin-bottom: 0.2rem;
+        }
+
+        .valor-auto {
+            background: #ffffff;
+            padding: 10px 12px;
+            border-radius: 18px;
+            border: 1px solid #e2e8f0;
+            font-weight: 500;
+            color: #1e2f3e;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #f4f7fa;
+            padding: 6px 14px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .radio-option input {
+            width: 18px;
+            height: 18px;
+            margin: 0;
+            accent-color: #2b7a4b;
+        }
+
+        .plazas-row {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .plazas-disponible, .plazas-ocupadas {
+            flex: 1;
+        }
+
+        .readonly-field {
+            background-color: #f0f3f7;
+            font-weight: 500;
+            color: #1f3b4c;
+        }
+
+        input[readonly] {
+            background-color: #f4f9fe;
+            cursor: default;
+        }
+
+        .form-actions {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .btn-submit {
+            background: #2b7a4b;
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 60px;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.2s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .btn-submit:hover {
+            background: #1e5e3a;
+            transform: scale(0.98);
+        }
+
+        .mensaje-exito {
+            background: #e1f7e8;
+            color: #146b3a;
+            padding: 12px;
+            border-radius: 24px;
+            margin-top: 16px;
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        hr {
+            margin: 1rem 0;
+            border: 0;
+            height: 1px;
+            background: #e2e8f0;
+        }
+
+        footer {
+            font-size: 0.7rem;
+            text-align: center;
+            padding: 1rem;
+            color: #8ba0ae;
+            background: #fafcff;
+            border-top: 1px solid #edf2f7;
+        }
+
+        @media (max-width: 550px) {
+            .search-wrapper {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .btn-buscar {
+                justify-content: center;
+                padding: 10px;
+            }
+            .logo-area {
+                flex-direction: column;
+                align-items: center;
+            }
+            .logo-imagen {
+                height: 45px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="form-container">
+    <div class="header-logo">
+        <div class="logo-area">
+            <div class="logo-gobierno">
+                <!-- IMAGEN DEL LOGO CON RUTA CORREGIDA -->
+                <img src="/workspaces/Registro_alojamiento/logos_visityministerio.png" alt="Gobierno de Catamarca" class="logo-imagen" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <span style="display:none; font-weight:600; align-items:center; gap:12px;">Catamarca<br><span style="font-size:0.7rem;">Gobierno</span></span>
+                <span style="font-weight:600;">Catamarca<br><span style="font-size:0.7rem;">Gobierno</span></span>
+            </div>
+            <div class="ministerio-text">
+                <strong>Ministerio de Cultura,<br>Turismo y Deporte</strong>
+                <div class="badge-catamarca">🇦🇷 VISIT CATAMARCA · Argentina</div>
+            </div>
+        </div>
+        <h1>Registro de ocupación</h1>
+        <div class="subtitulo">Alojamientos turísticos · Plazas disponibles y ocupación diaria</div>
+    </div>
+
+    <div class="form-body">
+        <!-- BUSCADOR DE ALOJAMIENTO -->
+        <div class="form-group">
+            <label>🔍 Buscar alojamiento <span class="label-required">*</span></label>
+            <div class="search-wrapper">
+                <select id="alojamientoSelect">
+                    <option value="">-- Seleccione un alojamiento --</option>
+                </select>
+                <button type="button" id="btnBuscar" class="btn-buscar">Buscar</button>
+            </div>
+        </div>
+
+        <!-- ZONA INFORMACIÓN AUTOMÁTICA (departamento, plazas disponibles, tipo) -->
+        <div id="infoAlojamiento" class="info-alojamiento" style="display: none;">
+            <div class="campo-auto">
+                <label>🏢 Departamento (automático)</label>
+                <div class="valor-auto" id="departamentoAuto">—</div>
+            </div>
+            <div class="campo-auto">
+                <label>🛏️ Plazas disponibles declaradas</label>
+                <div class="valor-auto" id="plazasDisponiblesAuto">—</div>
+            </div>
+            <div class="campo-auto">
+                <label>🏨 Tipo de alojamiento</label>
+                <div class="valor-auto" id="tipoAlojamientoAuto">—</div>
+            </div>
+        </div>
+
+        <!-- ZONA (OESTE, CENTRO, ESTE, SUR, NORTE) -->
+        <div class="form-group" id="zonaGroup" style="display: none;">
+            <label>📍 Elegir zona geográfica <span class="label-required">*</span></label>
+            <div class="radio-group" id="zonaRadios">
+                <label class="radio-option"><input type="radio" name="zona" value="Oeste"> Oeste</label>
+                <label class="radio-option"><input type="radio" name="zona" value="Centro"> Centro</label>
+                <label class="radio-option"><input type="radio" name="zona" value="Este"> Este</label>
+                <label class="radio-option"><input type="radio" name="zona" value="Sur"> Sur</label>
+                <label class="radio-option"><input type="radio" name="zona" value="Norte"> Norte</label>
+            </div>
+        </div>
+
+        <!-- PLAZAS OCUPADAS (manual) -->
+        <div class="form-group" id="ocupadasGroup" style="display: none;">
+            <div class="plazas-row">
+                <div class="plazas-ocupadas">
+                    <label>✍️ Plazas ocupadas (registrar hoy) <span class="label-required">*</span></label>
+                    <input type="number" id="plazasOcupadas" placeholder="Ej: 12" min="0" value="0">
+                </div>
+            </div>
+            <small style="color:#5c6f87;">Ingrese cantidad de plazas ocupadas en el día de hoy.</small>
+        </div>
+
+        <!-- Email de quien carga -->
+        <div class="form-group" id="emailGroup" style="display: none;">
+            <label>📧 Email de la persona que carga la información <span class="label-required">*</span></label>
+            <input type="email" id="emailCarga" placeholder="operador@turismo.gob.ar" autocomplete="email">
+        </div>
+
+        <div class="form-actions" id="botonEnviarGroup" style="display: none;">
+            <button id="btnEnviar" class="btn-submit">✓ Registrar ocupación</button>
+        </div>
+        <div id="mensajeFeedback"></div>
+    </div>
+    <footer>📊 Datos cargados automáticamente a Google Sheets. Fecha y hora de carga automática.</footer>
+</div>
+
+<script>
+    // ---------- BASE DE DATOS SIMULADA DE ALOJAMIENTOS ----------
+    // Contiene: nombre, departamento, plazasDeclaradas, tipo, id único
+    const alojamientosDB = [
+        { id: 1, nombre: "Cabañas del Valle", departamento: "Capital", plazasDeclaradas: 24, tipo: "Cabañas", zonaReferencia: "Centro" },
+        { id: 2, nombre: "Hotel Ancasti", departamento: "Ancasti", plazasDeclaradas: 48, tipo: "Hotel", zonaReferencia: "Este" },
+        { id: 3, nombre: "Hostel Wayra", departamento: "Andalgalá", plazasDeclaradas: 18, tipo: "Hostel", zonaReferencia: "Oeste" },
+        { id: 4, nombre: "Complejo Los Troncos", departamento: "Paclín", plazasDeclaradas: 32, tipo: "Cabañas", zonaReferencia: "Norte" },
+        { id: 5, nombre: "Gran Hotel Catamarca", departamento: "Capital", plazasDeclaradas: 120, tipo: "Hotel", zonaReferencia: "Centro" },
+        { id: 6, nombre: "La Posada del Sur", departamento: "Santa María", plazasDeclaradas: 22, tipo: "Otros", zonaReferencia: "Sur" },
+        { id: 7, nombre: "Eco Hostel Andino", departamento: "Belén", plazasDeclaradas: 15, tipo: "Hostel", zonaReferencia: "Oeste" },
+        { id: 8, nombre: "Refugio de Montaña", departamento: "Tinogasta", plazasDeclaradas: 10, tipo: "Otros", zonaReferencia: "Oeste" },
+        { id: 9, nombre: "Hotel Del Centro", departamento: "Capital", plazasDeclaradas: 56, tipo: "Hotel", zonaReferencia: "Centro" },
+        { id: 10, nombre: "Cabañas El Mirador", departamento: "Fray Mamerto Esquiú", plazasDeclaradas: 28, tipo: "Cabañas", zonaReferencia: "Este" }
+    ];
+
+    // Variables de estado del alojamiento seleccionado
+    let alojamientoSeleccionado = null;
+
+    // Cargar el select de alojamientos
+    function poblarSelectAlojamientos() {
+        const select = document.getElementById('alojamientoSelect');
+        select.innerHTML = '<option value="">-- Seleccione un alojamiento --</option>';
+        alojamientosDB.forEach(alo => {
+            const option = document.createElement('option');
+            option.value = alo.id;
+            option.textContent = `${alo.nombre} (${alo.tipo}) - ${alo.departamento}`;
+            select.appendChild(option);
+        });
+    }
+
+    // Mostrar información del alojamiento luego de buscar
+    function buscarYMostrarAlojamiento() {
+        const select = document.getElementById('alojamientoSelect');
+        const idSeleccionado = parseInt(select.value);
+        if (!idSeleccionado) {
+            alert('Por favor, seleccione un alojamiento de la lista.');
+            return;
+        }
+        const encontrado = alojamientosDB.find(alo => alo.id === idSeleccionado);
+        if (!encontrado) {
+            alert('Alojamiento no encontrado');
+            return;
+        }
+        alojamientoSeleccionado = encontrado;
+        
+        // Rellenar campos automáticos
+        document.getElementById('departamentoAuto').innerText = encontrado.departamento;
+        document.getElementById('plazasDisponiblesAuto').innerText = encontrado.plazasDeclaradas;
+        document.getElementById('tipoAlojamientoAuto').innerText = encontrado.tipo;
+        
+        // Mostrar bloques que estaban ocultos
+        document.getElementById('infoAlojamiento').style.display = 'block';
+        document.getElementById('zonaGroup').style.display = 'block';
+        document.getElementById('ocupadasGroup').style.display = 'block';
+        document.getElementById('emailGroup').style.display = 'block';
+        document.getElementById('botonEnviarGroup').style.display = 'block';
+        
+        // Limpiar radio de zona (selección previa) y poner default ninguno
+        const radios = document.querySelectorAll('input[name="zona"]');
+        radios.forEach(radio => radio.checked = false);
+        
+        // Limpiar campos previos
+        document.getElementById('plazasOcupadas').value = '';
+        document.getElementById('emailCarga').value = '';
+        
+        // Quitar mensajes previos
+        const msgDiv = document.getElementById('mensajeFeedback');
+        msgDiv.innerHTML = '';
+    }
+
+    // Función para enviar los datos a Google Sheets (mediante fetch a Google Apps Script Web App)
+    // Para que funcione, debes crear un script de Google Apps Script, desplegarlo como Web App y pegar la URL aquí.
+    // INSTRUCCIONES: 
+    // 1. Crear una hoja de cálculo en Google Sheets.
+    // 2. Ir a Extensiones > Apps Script, pegar el código del backend (se provee abajo en comentarios).
+    // 3. Desplegar como Web App (Ejecutar como "Yo", acceso "Cualquiera").
+    // 4. Copiar la URL y reemplazar en la variable SCRIPT_URL.
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyPedb1xiecGILZ1MtJLqZpgz-bRY1UWXEsgQaHphtKyxue1qOIMF0TbJGE9x6lUbzg/exec";  
+    
+    async function enviarASheets() {
+        if (!alojamientoSeleccionado) {
+            alert('Primero busque y seleccione un alojamiento válido.');
+            return;
+        }
+        
+        // Validaciones
+        const zonaSeleccionada = document.querySelector('input[name="zona"]:checked');
+        if (!zonaSeleccionada) {
+            alert('Debe seleccionar una zona (Oeste, Centro, Este, Sur o Norte).');
+            return;
+        }
+        const plazasOcupadasInput = document.getElementById('plazasOcupadas');
+        let plazasOcupadas = parseInt(plazasOcupadasInput.value);
+        if (isNaN(plazasOcupadas) || plazasOcupadas < 0) {
+            alert('Ingrese un número válido para plazas ocupadas (0 o mayor).');
+            return;
+        }
+        const email = document.getElementById('emailCarga').value.trim();
+        if (!email || !email.includes('@')) {
+            alert('Ingrese un email válido de la persona que carga la información.');
+            return;
+        }
+        
+        // Validar que las plazas ocupadas no superen las disponibles declaradas
+        if (plazasOcupadas > alojamientoSeleccionado.plazasDeclaradas) {
+            alert(`Las plazas ocupadas no pueden superar las plazas disponibles declaradas (${alojamientoSeleccionado.plazasDeclaradas}).`);
+            return;
+        }
+        
+        const zona = zonaSeleccionada.value;
+        const fechaCarga = new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' });
+        
+        // Preparar objeto con todos los campos
+        const registro = {
+            alojamiento: alojamientoSeleccionado.nombre,
+            departamento: alojamientoSeleccionado.departamento,
+            zona: zona,
+            plazas_disponibles_declaradas: alojamientoSeleccionado.plazasDeclaradas,
+            plazas_ocupadas: plazasOcupadas,
+            fecha_carga: fechaCarga,
+            email_operador: email,
+            tipo_alojamiento: alojamientoSeleccionado.tipo
+        };
+        
+        // Mostrar loading en botón
+        const btn = document.getElementById('btnEnviar');
+        const textoOriginal = btn.innerText;
+        btn.innerText = 'Enviando...';
+        btn.disabled = true;
+        
+        try {
+            // Enviar a Google Sheets mediante POST
+            await fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(registro)
+            });
+            
+            const mensajeDiv = document.getElementById('mensajeFeedback');
+            mensajeDiv.innerHTML = '<div class="mensaje-exito">✅ Datos registrados correctamente en Google Sheets. ¡Gracias!</div>';
+            
+            // Reset opcional: limpiar formulario
+            document.querySelectorAll('input[name="zona"]').forEach(r => r.checked = false);
+            document.getElementById('plazasOcupadas').value = '';
+            document.getElementById('emailCarga').value = '';
+            
+        } catch (error) {
+            console.error(error);
+            document.getElementById('mensajeFeedback').innerHTML = '<div style="color:#b91c1c; background:#fee2e2; padding:12px; border-radius:24px;">⚠️ Error de conexión. Revise que la URL del script de Google sea correcta y esté publicada.</div>';
+        } finally {
+            btn.innerText = textoOriginal;
+            btn.disabled = false;
+            setTimeout(() => {
+                const msg = document.getElementById('mensajeFeedback');
+                if(msg.innerHTML.includes('correctamente')) setTimeout(() => msg.innerHTML = '', 4000);
+            }, 3000);
+        }
+    }
+    
+    // Eventos
+    document.getElementById('btnBuscar').addEventListener('click', buscarYMostrarAlojamiento);
+    document.getElementById('btnEnviar').addEventListener('click', enviarASheets);
+    
+    // Inicializar select al cargar la página
+    poblarSelectAlojamientos();
+    
+    /* ========== CÓDIGO PARA APPS SCRIPT (Google Sheets) ==========
+    
+    // Pegar en el editor de scripts de la hoja de cálculo
+    function doPost(e) {
+      const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+      const data = JSON.parse(e.postData.contents);
+      
+      sheet.appendRow([
+        new Date(),                          // timestamp adicional
+        data.alojamiento,
+        data.departamento,
+        data.zona,
+        data.plazas_disponibles_declaradas,
+        data.plazas_ocupadas,
+        data.fecha_carga,
+        data.email_operador,
+        data.tipo_alojamiento
+      ]);
+      
+      return ContentService.createTextOutput(JSON.stringify({result: "ok"})).setMimeType(ContentService.MimeType.JSON);
+    }
+    
+    function doGet(e) {
+      return ContentService.createTextOutput("Servicio activo");
+    }
+    
+    // Luego desplegar como Web App (Ejecutar como: Yo, Acceso: Cualquiera)
+    */
+    
+</script>
+</body>
+</html>
