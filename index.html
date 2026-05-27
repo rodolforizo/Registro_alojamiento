@@ -21,7 +21,6 @@
             min-height: 100vh;
         }
 
-        /* Tarjeta principal */
         .form-container {
             max-width: 680px;
             width: 100%;
@@ -30,10 +29,8 @@
             border-radius: 28px;
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
             overflow: hidden;
-            transition: all 0.2s ease;
         }
 
-        /* Encabezado con logo */
         .header-logo {
             background: #ffffff;
             padding: 1.5rem 1.8rem 0.8rem 1.8rem;
@@ -102,7 +99,6 @@
             margin-bottom: 0.25rem;
         }
 
-        /* cuerpo del formulario */
         .form-body {
             padding: 1.8rem;
         }
@@ -117,7 +113,6 @@
             font-size: 0.85rem;
             margin-bottom: 0.4rem;
             color: #1f3b4c;
-            letter-spacing: -0.2px;
         }
 
         .label-required {
@@ -157,7 +152,6 @@
             font-weight: 500;
             font-size: 0.9rem;
             cursor: pointer;
-            transition: 0.2s;
             white-space: nowrap;
             height: 46px;
         }
@@ -226,19 +220,8 @@
             flex-wrap: wrap;
         }
 
-        .plazas-disponible, .plazas-ocupadas {
+        .plazas-ocupadas {
             flex: 1;
-        }
-
-        .readonly-field {
-            background-color: #f0f3f7;
-            font-weight: 500;
-            color: #1f3b4c;
-        }
-
-        input[readonly] {
-            background-color: #f4f9fe;
-            cursor: default;
         }
 
         .form-actions {
@@ -258,7 +241,6 @@
             cursor: pointer;
             width: 100%;
             transition: 0.2s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
 
         .btn-submit:hover {
@@ -275,13 +257,6 @@
             text-align: center;
             font-size: 0.85rem;
             font-weight: 500;
-        }
-
-        hr {
-            margin: 1rem 0;
-            border: 0;
-            height: 1px;
-            background: #e2e8f0;
         }
 
         footer {
@@ -317,7 +292,6 @@
     <div class="header-logo">
         <div class="logo-area">
             <div class="logo-gobierno">
-                <!-- LOGO CORREGIDO - TAMAÑO GRANDE para PC -->
                 <img src="logos_visityministerio.png" alt="Gobierno de Catamarca" class="logo-imagen">
                 <span style="font-weight:600;">Catamarca<br><span style="font-size:0.7rem;">Gobierno</span></span>
             </div>
@@ -331,7 +305,6 @@
     </div>
 
     <div class="form-body">
-        <!-- BUSCADOR DE ALOJAMIENTO -->
         <div class="form-group">
             <label>🔍 Buscar alojamiento <span class="label-required">*</span></label>
             <div class="search-wrapper">
@@ -342,7 +315,6 @@
             </div>
         </div>
 
-        <!-- ZONA INFORMACIÓN AUTOMÁTICA -->
         <div id="infoAlojamiento" class="info-alojamiento" style="display: none;">
             <div class="campo-auto">
                 <label>🏢 Departamento (automático)</label>
@@ -352,16 +324,11 @@
                 <label>🛏️ Plazas disponibles declaradas</label>
                 <div class="valor-auto" id="plazasDisponiblesAuto">—</div>
             </div>
-            <div class="campo-auto">
-                <label>🏨 Tipo de alojamiento</label>
-                <div class="valor-auto" id="tipoAlojamientoAuto">—</div>
-            </div>
         </div>
 
-        <!-- ZONA GEOGRÁFICA -->
         <div class="form-group" id="zonaGroup" style="display: none;">
             <label>📍 Elegir zona geográfica <span class="label-required">*</span></label>
-            <div class="radio-group" id="zonaRadios">
+            <div class="radio-group">
                 <label class="radio-option"><input type="radio" name="zona" value="Oeste"> Oeste</label>
                 <label class="radio-option"><input type="radio" name="zona" value="Centro"> Centro</label>
                 <label class="radio-option"><input type="radio" name="zona" value="Este"> Este</label>
@@ -370,7 +337,6 @@
             </div>
         </div>
 
-        <!-- PLAZAS OCUPADAS -->
         <div class="form-group" id="ocupadasGroup" style="display: none;">
             <div class="plazas-row">
                 <div class="plazas-ocupadas">
@@ -381,7 +347,6 @@
             <small style="color:#5c6f87;">Ingrese cantidad de plazas ocupadas en el día de hoy.</small>
         </div>
 
-        <!-- Email de quien carga -->
         <div class="form-group" id="emailGroup" style="display: none;">
             <label>📧 Email de la persona que carga la información <span class="label-required">*</span></label>
             <input type="email" id="emailCarga" placeholder="operador@turismo.gob.ar" autocomplete="email">
@@ -396,18 +361,251 @@
 </div>
 
 <script>
-    // BASE DE DATOS DE ALOJAMIENTOS
+    // ==================== BASE DE DATOS DE ALOJAMIENTOS ====================
+    // Datos importados desde CSV - CORREGIDOS (ids únicos automáticos)
     const alojamientosDB = [
-        { id: 1, nombre: "Cabañas del Valle", departamento: "Capital", plazasDeclaradas: 24, tipo: "Cabañas" },
-        { id: 2, nombre: "Hotel Ancasti", departamento: "Ancasti", plazasDeclaradas: 48, tipo: "Hotel" },
-        { id: 3, nombre: "Hostel Wayra", departamento: "Andalgalá", plazasDeclaradas: 18, tipo: "Hostel" },
-        { id: 4, nombre: "Complejo Los Troncos", departamento: "Paclín", plazasDeclaradas: 32, tipo: "Cabañas" },
-        { id: 5, nombre: "Gran Hotel Catamarca", departamento: "Capital", plazasDeclaradas: 120, tipo: "Hotel" },
-        { id: 6, nombre: "La Posada del Sur", departamento: "Santa María", plazasDeclaradas: 22, tipo: "Otros" },
-        { id: 7, nombre: "Eco Hostel Andino", departamento: "Belén", plazasDeclaradas: 15, tipo: "Hostel" },
-        { id: 8, nombre: "Refugio de Montaña", departamento: "Tinogasta", plazasDeclaradas: 10, tipo: "Otros" },
-        { id: 9, nombre: "Hotel Del Centro", departamento: "Capital", plazasDeclaradas: 56, tipo: "Hotel" },
-        { id: 10, nombre: "Cabañas El Mirador", departamento: "Fray Mamerto Esquiú", plazasDeclaradas: 28, tipo: "Cabañas" }
+        { id: 1, nombre: "Hotel Casino", departamento: "Capital", plazasDeclaradas: 144 },
+        { id: 2, nombre: "Amerian Catamarca Park Hotel", departamento: "Capital", plazasDeclaradas: 150 },
+        { id: 3, nombre: "Hotel Ancasti", departamento: "Capital", plazasDeclaradas: 140 },
+        { id: 4, nombre: "Grand Hotel", departamento: "Capital", plazasDeclaradas: 74 },
+        { id: 5, nombre: "Hotel Arenales", departamento: "Capital", plazasDeclaradas: 120 },
+        { id: 6, nombre: "Coral Hotel", departamento: "Capital", plazasDeclaradas: 225 },
+        { id: 7, nombre: "Hotel Inti Huasi", departamento: "Capital", plazasDeclaradas: 110 },
+        { id: 8, nombre: "Hotel Suma Huasi", departamento: "Capital", plazasDeclaradas: 96 },
+        { id: 9, nombre: "Hotel Pucará", departamento: "Capital", plazasDeclaradas: 110 },
+        { id: 10, nombre: "Hotel Atahualpa", departamento: "Capital", plazasDeclaradas: 45 },
+        { id: 11, nombre: "Hotel El Shincal 2", departamento: "Capital", plazasDeclaradas: 50 },
+        { id: 12, nombre: "Hotel San Martín", departamento: "Capital", plazasDeclaradas: 55 },
+        { id: 13, nombre: "H1 Apartments Hotel", departamento: "Capital", plazasDeclaradas: 90 },
+        { id: 14, nombre: "La Alameda Apart Hotel", departamento: "Capital", plazasDeclaradas: 64 },
+        { id: 15, nombre: "Apart Hotel La Concepción", departamento: "Capital", plazasDeclaradas: 25 },
+        { id: 16, nombre: "Catamarca Apart", departamento: "Capital", plazasDeclaradas: 25 },
+        { id: 17, nombre: "Apart Hotel Urbanus Suites", departamento: "Capital", plazasDeclaradas: 14 },
+        { id: 18, nombre: "Altitud Apart", departamento: "Capital", plazasDeclaradas: 20 },
+        { id: 19, nombre: "Cabañas Samay", departamento: "Capital", plazasDeclaradas: 33 },
+        { id: 20, nombre: "Residencial Mariangel", departamento: "Capital", plazasDeclaradas: 27 },
+        { id: 21, nombre: "Residencial Shincal 1", departamento: "Capital", plazasDeclaradas: 80 },
+        { id: 22, nombre: "Residencial Inca Huasi", departamento: "Capital", plazasDeclaradas: 28 },
+        { id: 23, nombre: "Residencial Delgado", departamento: "Capital", plazasDeclaradas: 47 },
+        { id: 24, nombre: "Residencial Avenida", departamento: "Capital", plazasDeclaradas: 50 },
+        { id: 25, nombre: "Residencial Menen", departamento: "Capital", plazasDeclaradas: 37 },
+        { id: 26, nombre: "Hostal Atix", departamento: "Capital", plazasDeclaradas: 20 },
+        { id: 27, nombre: "Meke's Bed and Breakfast", departamento: "Capital", plazasDeclaradas: 14 },
+        { id: 28, nombre: "La Casita Hostel & Suite", departamento: "Capital", plazasDeclaradas: 6 },
+        { id: 29, nombre: "Hospedaje El Peregrino", departamento: "Capital", plazasDeclaradas: 636 },
+        { id: 30, nombre: "Apart Chacabuco", departamento: "Capital", plazasDeclaradas: 31 },
+        { id: 31, nombre: "ALMAMARKA CABAÑAS DE ADOBE", departamento: "Capital", plazasDeclaradas: 36 },
+        { id: 32, nombre: "Hostería Provincial El Bolsón", departamento: "Ambato", plazasDeclaradas: 27 },
+        { id: 33, nombre: "Altos de El Bolsón", departamento: "Ambato", plazasDeclaradas: 12 },
+        { id: 34, nombre: "La Posada de Celestino", departamento: "Ambato", plazasDeclaradas: 15 },
+        { id: 35, nombre: "Hostería El Rodeo", departamento: "Ambato", plazasDeclaradas: 60 },
+        { id: 36, nombre: "Cabaña de Montaña", departamento: "Ambato", plazasDeclaradas: 37 },
+        { id: 37, nombre: "Lo de Angelita", departamento: "Ambato", plazasDeclaradas: 15 },
+        { id: 38, nombre: "Cabañas Las Moras", departamento: "Ambato", plazasDeclaradas: 17 },
+        { id: 39, nombre: "Terrazas del Gracián", departamento: "Ambato", plazasDeclaradas: 38 },
+        { id: 40, nombre: "Hostería Municipal de La Puerta", departamento: "Ambato", plazasDeclaradas: 18 },
+        { id: 41, nombre: "Katana Cabañas", departamento: "Ambato", plazasDeclaradas: 47 },
+        { id: 42, nombre: "Hostal las Dos A", departamento: "Ambato", plazasDeclaradas: 34 },
+        { id: 43, nombre: "Complejo Turístico La Constancia", departamento: "Ambato", plazasDeclaradas: 40 },
+        { id: 44, nombre: "Cabañas Los Alpinos", departamento: "Ambato", plazasDeclaradas: 60 },
+        { id: 45, nombre: "Posada Las Salvias", departamento: "Ambato", plazasDeclaradas: 29 },
+        { id: 46, nombre: "Hospedaje Cóndor Huasi", departamento: "Ambato", plazasDeclaradas: 25 },
+        { id: 47, nombre: "Complejo Turistico Las Juntas", departamento: "Ambato", plazasDeclaradas: 72 },
+        { id: 48, nombre: "Cabañas Mis Montañas", departamento: "Ambato", plazasDeclaradas: 20 },
+        { id: 49, nombre: "Cabañas Los Palominos", departamento: "Ambato", plazasDeclaradas: 18 },
+        { id: 50, nombre: "Cabañas Aras del Cerro", departamento: "Ambato", plazasDeclaradas: 30 },
+        { id: 51, nombre: "Albergue Camping Educativo Las Juntas", departamento: "Ambato", plazasDeclaradas: 90 },
+        { id: 52, nombre: "Posada Niña Juana", departamento: "Fray M. Esquiú", plazasDeclaradas: 21 },
+        { id: 53, nombre: "Cabañas La Alcahuisa", departamento: "Fray M. Esquiú", plazasDeclaradas: 30 },
+        { id: 54, nombre: "Hotel Don Oresttes", departamento: "Fray M. Esquiú", plazasDeclaradas: 98 },
+        { id: 55, nombre: "Hospedaje Las Pirquitas", departamento: "Fray M. Esquiú", plazasDeclaradas: 36 },
+        { id: 56, nombre: "Cabañas Las Lomitas", departamento: "Fray M. Esquiú", plazasDeclaradas: 40 },
+        { id: 57, nombre: "Hostería Municipal Las Pirquitas", departamento: "Fray M. Esquiú", plazasDeclaradas: 12 },
+        { id: 58, nombre: "Don Demetrio", departamento: "Fray M. Esquiú", plazasDeclaradas: 11 },
+        { id: 59, nombre: "Cabañas La Gringa", departamento: "Fray M. Esquiú", plazasDeclaradas: 15 },
+        { id: 60, nombre: "Cabaña Paraíso Colla", departamento: "Fray M. Esquiú", plazasDeclaradas: 10 },
+        { id: 61, nombre: "Posada Pomancillo", departamento: "Fray M. Esquiú", plazasDeclaradas: 20 },
+        { id: 62, nombre: "Hostería Valle Viejo", departamento: "Valle Viejo", plazasDeclaradas: 25 },
+        { id: 63, nombre: "Hostería Nuestra Tierra", departamento: "Valle Viejo", plazasDeclaradas: 30 },
+        { id: 64, nombre: "Finca El Recuerdo", departamento: "Valle Viejo", plazasDeclaradas: 22 },
+        { id: 65, nombre: "Cabañas Valles del Labrador", departamento: "Valle Viejo", plazasDeclaradas: 96 },
+        { id: 66, nombre: "Cabañas Valle Hermoso", departamento: "Valle Viejo", plazasDeclaradas: 72 },
+        { id: 67, nombre: "Cabañas Quinta Las Ruedas", departamento: "Valle Viejo", plazasDeclaradas: 27 },
+        { id: 68, nombre: "Cabañas El Aquí", departamento: "Valle Viejo", plazasDeclaradas: 16 },
+        { id: 69, nombre: "Las Catalinas", departamento: "Valle Viejo", plazasDeclaradas: 25 },
+        { id: 70, nombre: "Hostería Cuesta El Portezuelo", departamento: "Valle Viejo", plazasDeclaradas: 16 },
+        { id: 71, nombre: "Luceros del Alba", departamento: "Valle Viejo", plazasDeclaradas: 22 },
+        { id: 72, nombre: "Hostería Municipal La Merced", departamento: "Paclín", plazasDeclaradas: 90 },
+        { id: 73, nombre: "Hostería Balcosna", departamento: "Paclín", plazasDeclaradas: 40 },
+        { id: 74, nombre: "Hostería Loma Hermosa", departamento: "Paclín", plazasDeclaradas: 26 },
+        { id: 75, nombre: "Cabañas Villa Celina", departamento: "Paclín", plazasDeclaradas: 18 },
+        { id: 76, nombre: "Cabañas Finca Don Jorge", departamento: "Paclín", plazasDeclaradas: 14 },
+        { id: 77, nombre: "Cabañas Arakuku", departamento: "Paclín", plazasDeclaradas: 22 },
+        { id: 78, nombre: "Lodge La Ceiba", departamento: "Paclín", plazasDeclaradas: 16 },
+        { id: 79, nombre: "Complejo Turístico de APUNCa", departamento: "Paclín", plazasDeclaradas: 21 },
+        { id: 80, nombre: "Hostería Municipal Niquijas", departamento: "Capayán", plazasDeclaradas: 32 },
+        { id: 81, nombre: "Hostería y Spa La Concepción S. A.", departamento: "Capayán", plazasDeclaradas: 30 },
+        { id: 82, nombre: "La Aguada", departamento: "Capayán", plazasDeclaradas: 26 },
+        { id: 83, nombre: "Escape Urbano", departamento: "Capayán", plazasDeclaradas: 8 },
+        { id: 84, nombre: "Hostería Municipal de Antofagasta", departamento: "ADLS", plazasDeclaradas: 90 },
+        { id: 85, nombre: "Hostería Pucará", departamento: "ADLS", plazasDeclaradas: 36 },
+        { id: 86, nombre: "Hostería Pueblo del Sol", departamento: "ADLS", plazasDeclaradas: 20 },
+        { id: 87, nombre: "Jalen Apart Hotel", departamento: "ADLS", plazasDeclaradas: 10 },
+        { id: 88, nombre: "El Coplero", departamento: "ADLS", plazasDeclaradas: 11 },
+        { id: 89, nombre: "Famana", departamento: "ADLS", plazasDeclaradas: 9 },
+        { id: 90, nombre: "Casa de Piedra", departamento: "ADLS", plazasDeclaradas: 22 },
+        { id: 91, nombre: "Hostería de Altura El Peñón", departamento: "ADLS", plazasDeclaradas: 20 },
+        { id: 92, nombre: "La Punita", departamento: "ADLS", plazasDeclaradas: 12 },
+        { id: 93, nombre: "Los Aires De La Puna", departamento: "ADLS", plazasDeclaradas: 22 },
+        { id: 94, nombre: "Don Carmelo", departamento: "ADLS", plazasDeclaradas: 20 },
+        { id: 95, nombre: "Cabaña La Pómez", departamento: "ADLS", plazasDeclaradas: 14 },
+        { id: 96, nombre: "Patta Tickan", departamento: "ADLS", plazasDeclaradas: 24 },
+        { id: 97, nombre: "Hotel Rivadavia", departamento: "La Paz", plazasDeclaradas: 38 },
+        { id: 98, nombre: "Tula Hotel", departamento: "La Paz", plazasDeclaradas: 36 },
+        { id: 99, nombre: "Residencial Tu Recreo", departamento: "La Paz", plazasDeclaradas: 20 },
+        { id: 100, nombre: "Residencial Recreo", departamento: "La Paz", plazasDeclaradas: 11 },
+        { id: 101, nombre: "Residencial Las Manos", departamento: "La Paz", plazasDeclaradas: 26 },
+        { id: 102, nombre: "Residencial Del Valle", departamento: "La Paz", plazasDeclaradas: 16 },
+        { id: 103, nombre: "Hostería Municipal Inti Punku", departamento: "La Paz", plazasDeclaradas: 20 },
+        { id: 104, nombre: "Hostería Municipal Ancasti", departamento: "Ancasti", plazasDeclaradas: 25 },
+        { id: 105, nombre: "Cabaña Pircas Viejas", departamento: "Ancasti", plazasDeclaradas: 8 },
+        { id: 106, nombre: "Cabañas El Puesto de López", departamento: "Ancasti", plazasDeclaradas: 12 },
+        { id: 107, nombre: "Hostería Huasi Guayamba", departamento: "El Alto", plazasDeclaradas: 16 },
+        { id: 108, nombre: "Hostería Guayamba", departamento: "El Alto", plazasDeclaradas: 25 },
+        { id: 109, nombre: "Cabañas el Remanso", departamento: "El Alto", plazasDeclaradas: 16 },
+        { id: 110, nombre: "Hostería Municipal de Tapso", departamento: "El Alto", plazasDeclaradas: 27 },
+        { id: 111, nombre: "Hotel Los Altos", departamento: "Santa Rosa", plazasDeclaradas: 49 },
+        { id: 112, nombre: "Hotel D'Artagnan", departamento: "Santa Rosa", plazasDeclaradas: 18 },
+        { id: 113, nombre: "Hotel La Posada del Cazador", departamento: "Santa Rosa", plazasDeclaradas: 27 },
+        { id: 114, nombre: "Cabañas La Mercedita", departamento: "Santa Rosa", plazasDeclaradas: 4 },
+        { id: 115, nombre: "Hostería Alijilán", departamento: "Santa Rosa", plazasDeclaradas: 42 },
+        { id: 116, nombre: "Hospedaje Casa de Campo El Fortín", departamento: "Andalgalá", plazasDeclaradas: 22 },
+        { id: 117, nombre: "Complejo Valle Hermoso Yunka Suma", departamento: "Andalgalá", plazasDeclaradas: 40 },
+        { id: 118, nombre: "Complejo Habitacional El Lindero", departamento: "Andalgalá", plazasDeclaradas: 45 },
+        { id: 119, nombre: "Cabañas Mirador del Aconquija", departamento: "Andalgalá", plazasDeclaradas: 15 },
+        { id: 120, nombre: "Hotel Gran Pucará", departamento: "Andalgalá", plazasDeclaradas: 62 },
+        { id: 121, nombre: "Hospedaje Resto Bar il Nonno", departamento: "Andalgalá", plazasDeclaradas: 36 },
+        { id: 122, nombre: "Cabañas Portal del Nevado", departamento: "Andalgalá", plazasDeclaradas: 20 },
+        { id: 123, nombre: "Hotel Plaza Andalgalá S.R.L", departamento: "Andalgalá", plazasDeclaradas: 94 },
+        { id: 124, nombre: "Hotel de Turismo Santa Rita", departamento: "Andalgalá", plazasDeclaradas: 36 },
+        { id: 125, nombre: "Hotel Confort", departamento: "Andalgalá", plazasDeclaradas: 60 },
+        { id: 126, nombre: "Hotel Boutique HB", departamento: "Andalgalá", plazasDeclaradas: 20 },
+        { id: 127, nombre: "Hotel Aquasol", departamento: "Andalgalá", plazasDeclaradas: 50 },
+        { id: 128, nombre: "Hotel Aires del Nevado", departamento: "Andalgalá", plazasDeclaradas: 58 },
+        { id: 129, nombre: "Casona Hotel La Vuelta de Olegario", departamento: "Andalgalá", plazasDeclaradas: 22 },
+        { id: 130, nombre: "Quinta Los Tilos", departamento: "Andalgalá", plazasDeclaradas: 5 },
+        { id: 131, nombre: "Residencial Tynku", departamento: "Andalgalá", plazasDeclaradas: 32 },
+        { id: 132, nombre: "Cabañas Los Nogales del Huayco", departamento: "Andalgalá", plazasDeclaradas: 25 },
+        { id: 133, nombre: "Cabañas Julumao", departamento: "Andalgalá", plazasDeclaradas: 14 },
+        { id: 134, nombre: "Cabañas El Tata", departamento: "Andalgalá", plazasDeclaradas: 49 },
+        { id: 135, nombre: "Cabañas Alfonso 1°", departamento: "Andalgalá", plazasDeclaradas: 35 },
+        { id: 136, nombre: "Cabañas Aldea del Sol", departamento: "Andalgalá", plazasDeclaradas: 27 },
+        { id: 137, nombre: "Hostería Refugio del Minero", departamento: "Andalgalá", plazasDeclaradas: 32 },
+        { id: 138, nombre: "Estancia Condado de Huasán", departamento: "Andalgalá", plazasDeclaradas: 17 },
+        { id: 139, nombre: "Hotel Belén", departamento: "Belén", plazasDeclaradas: 109 },
+        { id: 140, nombre: "Las Cardas Posada y Spa", departamento: "Belén", plazasDeclaradas: 15 },
+        { id: 141, nombre: "Hotel Angelica", departamento: "Belén", plazasDeclaradas: 40 },
+        { id: 142, nombre: "Hotel Gomez", departamento: "Belén", plazasDeclaradas: 46 },
+        { id: 143, nombre: "Hotel Wisz-V", departamento: "Belén", plazasDeclaradas: 41 },
+        { id: 144, nombre: "Cabañas El Recuerdo", departamento: "Belén", plazasDeclaradas: 65 },
+        { id: 145, nombre: "La Vieja Antena", departamento: "Belén", plazasDeclaradas: 12 },
+        { id: 146, nombre: "Hostel Estación 40", departamento: "Belén", plazasDeclaradas: 14 },
+        { id: 147, nombre: "Hostel Villa San Ignacio", departamento: "Belén", plazasDeclaradas: 25 },
+        { id: 148, nombre: "El Belichito", departamento: "Belén", plazasDeclaradas: 13 },
+        { id: 149, nombre: "Hospedaje Shaka Ekeikey", departamento: "Belén", plazasDeclaradas: 24 },
+        { id: 150, nombre: "Huaco Casa de Campo", departamento: "Belén", plazasDeclaradas: 10 },
+        { id: 151, nombre: "Belén Apart Hotel", departamento: "Belén", plazasDeclaradas: 25 },
+        { id: 152, nombre: "Hostería Municipal de Corral Quemado", departamento: "Belén", plazasDeclaradas: 20 },
+        { id: 153, nombre: "Hostería Municipal Cacique Juan Chelemín", departamento: "Belén", plazasDeclaradas: 21 },
+        { id: 154, nombre: "Hospedaje Alta Huasi", departamento: "Belén", plazasDeclaradas: 16 },
+        { id: 155, nombre: "Hostal La Nona", departamento: "Belén", plazasDeclaradas: 12 },
+        { id: 156, nombre: "Cabañas El Shincal", departamento: "Belén", plazasDeclaradas: 18 },
+        { id: 157, nombre: "Hospedaje Aldea Tierra Eco", departamento: "Belén", plazasDeclaradas: 13 },
+        { id: 158, nombre: "Hospedaje Las Cañas", departamento: "Belén", plazasDeclaradas: 17 },
+        { id: 159, nombre: "Munay Complejo Ecoturistico", departamento: "Belén", plazasDeclaradas: 5 },
+        { id: 160, nombre: "Hostería Puerta De Corral Quemado", departamento: "Belén", plazasDeclaradas: 32 },
+        { id: 161, nombre: "Hostería Municipal El Durazno", departamento: "Belén", plazasDeclaradas: 14 },
+        { id: 162, nombre: "Complejo Turístico Agua Clara", departamento: "Belén", plazasDeclaradas: 30 },
+        { id: 163, nombre: "Hostería Oeste Paraíso", departamento: "Belén", plazasDeclaradas: 32 },
+        { id: 164, nombre: "El Remenizo Cabaña de Montaña", departamento: "Belén", plazasDeclaradas: 10 },
+        { id: 165, nombre: "Hospedaje Coquena", departamento: "Belén", plazasDeclaradas: 16 },
+        { id: 166, nombre: "Hostería de Villa Vil", departamento: "Belén", plazasDeclaradas: 9 },
+        { id: 167, nombre: "Hostería Pirucha", departamento: "Belén", plazasDeclaradas: 40 },
+        { id: 168, nombre: "Hostal Carlota Vázquez", departamento: "Belén", plazasDeclaradas: 7 },
+        { id: 169, nombre: "Albergue Municipal Villa Vil", departamento: "Belén", plazasDeclaradas: 33 },
+        { id: 170, nombre: "Abaucan Hotel & Spa", departamento: "Tinogasta", plazasDeclaradas: 40 },
+        { id: 171, nombre: "Hostería Santa Rita", departamento: "Tinogasta", plazasDeclaradas: 30 },
+        { id: 172, nombre: "Hostería San Carlos", departamento: "Tinogasta", plazasDeclaradas: 25 },
+        { id: 173, nombre: "Hostería CEL-HAY San Pedro", departamento: "Tinogasta", plazasDeclaradas: 43 },
+        { id: 174, nombre: "Hotel Umbral de la Luna", departamento: "Tinogasta", plazasDeclaradas: 24 },
+        { id: 175, nombre: "JR Hotel", departamento: "Tinogasta", plazasDeclaradas: 23 },
+        { id: 176, nombre: "Hotel Cortaderas", departamento: "Tinogasta", plazasDeclaradas: 100 },
+        { id: 177, nombre: "Tejada Hotel", departamento: "Tinogasta", plazasDeclaradas: 25 },
+        { id: 178, nombre: "Hotel Boutique Casona del Pino", departamento: "Tinogasta", plazasDeclaradas: 12 },
+        { id: 179, nombre: "Hotel San Francisco", departamento: "Tinogasta", plazasDeclaradas: 62 },
+        { id: 180, nombre: "Cabañas Pissis", departamento: "Tinogasta", plazasDeclaradas: 32 },
+        { id: 181, nombre: "Cabañas Portal De La Cordillera", departamento: "Tinogasta", plazasDeclaradas: 50 },
+        { id: 182, nombre: "Las Cabañas Aire de Los Andes", departamento: "Tinogasta", plazasDeclaradas: 40 },
+        { id: 183, nombre: "Cabañas Dunas de Medanitos", departamento: "Tinogasta", plazasDeclaradas: 35 },
+        { id: 184, nombre: "Cabañas Tunay", departamento: "Tinogasta", plazasDeclaradas: 50 },
+        { id: 185, nombre: "Cabañas Piamwalla", departamento: "Tinogasta", plazasDeclaradas: 8 },
+        { id: 186, nombre: "Dunas de Fiambalá Cabañas", departamento: "Tinogasta", plazasDeclaradas: 16 },
+        { id: 187, nombre: "Cabañas Abaucán", departamento: "Tinogasta", plazasDeclaradas: 13 },
+        { id: 188, nombre: "Residencial Doña Goyita", departamento: "Tinogasta", plazasDeclaradas: 11 },
+        { id: 189, nombre: "Doña Pocha", departamento: "Tinogasta", plazasDeclaradas: 35 },
+        { id: 190, nombre: "Posada Las Cañas", departamento: "Tinogasta", plazasDeclaradas: 15 },
+        { id: 191, nombre: "La Ramadita Posada Rural", departamento: "Tinogasta", plazasDeclaradas: 15 },
+        { id: 192, nombre: "Hospedaje Las Termas", departamento: "Tinogasta", plazasDeclaradas: 14 },
+        { id: 193, nombre: "Posada Killa Qullqui", departamento: "Tinogasta", plazasDeclaradas: 6 },
+        { id: 194, nombre: "Hospedaje San Jorge", departamento: "Tinogasta", plazasDeclaradas: 21 },
+        { id: 195, nombre: "A Las Termas", departamento: "Tinogasta", plazasDeclaradas: 6 },
+        { id: 196, nombre: "El Rancho del Motoquero Medanos de Fiambala", departamento: "Tinogasta", plazasDeclaradas: 13 },
+        { id: 197, nombre: "Hotel de Turismo Tinogasta", departamento: "Tinogasta", plazasDeclaradas: 69 },
+        { id: 198, nombre: "Hotel de Adobe Casa Grande", departamento: "Tinogasta", plazasDeclaradas: 30 },
+        { id: 199, nombre: "Nicolás Tinogasta Hotel", departamento: "Tinogasta", plazasDeclaradas: 48 },
+        { id: 200, nombre: "Andes Xtreme Hotel Boutique", departamento: "Tinogasta", plazasDeclaradas: 20 },
+        { id: 201, nombre: "Residencial El Viajante", departamento: "Tinogasta", plazasDeclaradas: 24 },
+        { id: 202, nombre: "Residencial El Emperador", departamento: "Tinogasta", plazasDeclaradas: 50 },
+        { id: 203, nombre: "Hostal Las Parinas", departamento: "Tinogasta", plazasDeclaradas: 14 },
+        { id: 204, nombre: "Hostal Sante", departamento: "Tinogasta", plazasDeclaradas: 28 },
+        { id: 205, nombre: "Cabañas El Arrebol", departamento: "Tinogasta", plazasDeclaradas: 17 },
+        { id: 206, nombre: "Hostería Novel", departamento: "Tinogasta", plazasDeclaradas: 20 },
+        { id: 207, nombre: "Hostal Sisabel", departamento: "Tinogasta", plazasDeclaradas: 18 },
+        { id: 208, nombre: "Cabañas Zorro Gris", departamento: "Tinogasta", plazasDeclaradas: 24 },
+        { id: 209, nombre: "Complejo Termal La Aguadita", departamento: "Tinogasta", plazasDeclaradas: 0 },
+        { id: 210, nombre: "Casa de Campo El Solar de los Olivos", departamento: "Tinogasta", plazasDeclaradas: 15 },
+        { id: 211, nombre: "Hostería Antigal", departamento: "Tinogasta", plazasDeclaradas: 6 },
+        { id: 212, nombre: "Finca La Sala", departamento: "Tinogasta", plazasDeclaradas: 15 },
+        { id: 213, nombre: "Casa Blanca", departamento: "Tinogasta", plazasDeclaradas: 23 },
+        { id: 214, nombre: "Posada Los Orquera", departamento: "Tinogasta", plazasDeclaradas: 23 },
+        { id: 215, nombre: "El Viejo Algarrobo", departamento: "Tinogasta", plazasDeclaradas: 10 },
+        { id: 216, nombre: "Hotel Inti Huaico", departamento: "Santa María", plazasDeclaradas: 81 },
+        { id: 217, nombre: "Hotel Plaza", departamento: "Santa María", plazasDeclaradas: 25 },
+        { id: 218, nombre: "Hotel Curuzú Gil", departamento: "Santa María", plazasDeclaradas: 42 },
+        { id: 219, nombre: "Hotel de Turismo Cielos del Oeste", departamento: "Santa María", plazasDeclaradas: 37 },
+        { id: 220, nombre: "Hotel Del Valle", departamento: "Santa María", plazasDeclaradas: 50 },
+        { id: 221, nombre: "Hotel Amancay", departamento: "Santa María", plazasDeclaradas: 22 },
+        { id: 222, nombre: "C.A.A.SA.MA. Hotel", departamento: "Santa María", plazasDeclaradas: 66 },
+        { id: 223, nombre: "Apart Hotel El Algarrobo", departamento: "Santa María", plazasDeclaradas: 76 },
+        { id: 224, nombre: "Don Andres", departamento: "Santa María", plazasDeclaradas: 22 },
+        { id: 225, nombre: "Cabañas Viento Ocre", departamento: "Santa María", plazasDeclaradas: 25 },
+        { id: 226, nombre: "Cabañas Valles Calchaquíes", departamento: "Santa María", plazasDeclaradas: 32 },
+        { id: 227, nombre: "Cabañas Torres de Sol", departamento: "Santa María", plazasDeclaradas: 16 },
+        { id: 228, nombre: "Cabañas El Sosiego Lodge", departamento: "Santa María", plazasDeclaradas: 55 },
+        { id: 229, nombre: "Cabañas Arco Iris", departamento: "Santa María", plazasDeclaradas: 12 },
+        { id: 230, nombre: "Cabañas Achalay", departamento: "Santa María", plazasDeclaradas: 10 },
+        { id: 231, nombre: "Residencial Pérez", departamento: "Santa María", plazasDeclaradas: 9 },
+        { id: 232, nombre: "Apart El Árbol De La Vida", departamento: "Santa María", plazasDeclaradas: 16 },
+        { id: 233, nombre: "Residencial JI", departamento: "Santa María", plazasDeclaradas: 13 },
+        { id: 234, nombre: "Hostel Camping El Sol", departamento: "Santa María", plazasDeclaradas: 24 },
+        { id: 235, nombre: "Hostal Ítalo", departamento: "Santa María", plazasDeclaradas: 60 },
+        { id: 236, nombre: "Residencial Atencio", departamento: "Pomán", plazasDeclaradas: 20 },
+        { id: 237, nombre: "Hostal Pomanti", departamento: "Pomán", plazasDeclaradas: 30 },
+        { id: 238, nombre: "Cabañas Rosario de Colana", departamento: "Pomán", plazasDeclaradas: 12 },
+        { id: 239, nombre: "Hotel Olivos de Poman", departamento: "Pomán", plazasDeclaradas: 60 },
+        { id: 240, nombre: "Cabañas Huayra Suma", departamento: "Pomán", plazasDeclaradas: 18 },
+        { id: 241, nombre: "Hostería Mika", departamento: "Pomán", plazasDeclaradas: 22 },
+        { id: 242, nombre: "Hostal Doña Dolores", departamento: "Pomán", plazasDeclaradas: 12 }
     ];
 
     let alojamientoSeleccionado = null;
@@ -418,7 +616,7 @@
         alojamientosDB.forEach(alo => {
             const option = document.createElement('option');
             option.value = alo.id;
-            option.textContent = `${alo.nombre} (${alo.tipo}) - ${alo.departamento}`;
+            option.textContent = `${alo.nombre} (${alo.departamento}) - ${alo.plazasDeclaradas} plazas`;
             select.appendChild(option);
         });
     }
@@ -439,7 +637,6 @@
         
         document.getElementById('departamentoAuto').innerText = encontrado.departamento;
         document.getElementById('plazasDisponiblesAuto').innerText = encontrado.plazasDeclaradas;
-        document.getElementById('tipoAlojamientoAuto').innerText = encontrado.tipo;
         
         document.getElementById('infoAlojamiento').style.display = 'block';
         document.getElementById('zonaGroup').style.display = 'block';
@@ -457,7 +654,7 @@
         msgDiv.innerHTML = '';
     }
 
-    // IMPORTANTE: Reemplazar con tu URL de Google Apps Script
+    // ⚠️ IMPORTANTE: Reemplazar con tu URL de Google Apps Script
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyPedb1xiecGILZ1MtJLqZpgz-bRY1UWXEsgQaHphtKyxue1qOIMF0TbJGE9x6lUbzg/exec";
     
     async function enviarASheets() {
@@ -500,8 +697,7 @@
             plazas_disponibles_declaradas: alojamientoSeleccionado.plazasDeclaradas,
             plazas_ocupadas: plazasOcupadas,
             fecha_carga: fechaCarga,
-            email_operador: email,
-            tipo_alojamiento: alojamientoSeleccionado.tipo
+            email_operador: email
         };
         
         const btn = document.getElementById('btnEnviar');
