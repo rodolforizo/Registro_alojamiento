@@ -59,9 +59,9 @@
         }
 
         .logo-imagen {
-            height: 55px;
+            height: 110px;
             width: auto;
-            max-width: 120px;
+            max-width: 200px;
             object-fit: contain;
         }
 
@@ -85,6 +85,8 @@
             border-radius: 40px;
             font-size: 0.75rem;
             font-weight: 500;
+            display: inline-block;
+            margin-top: 5px;
         }
 
         h1 {
@@ -305,7 +307,7 @@
                 align-items: center;
             }
             .logo-imagen {
-                height: 45px;
+                height: 70px;
             }
         }
     </style>
@@ -315,9 +317,8 @@
     <div class="header-logo">
         <div class="logo-area">
             <div class="logo-gobierno">
-                <!-- IMAGEN DEL LOGO CON RUTA CORREGIDA -->
-             <img src="https://raw.githubusercontent.com/rodolforizo/Registro_alojamiento/main/logos_visityministerio.png" alt="Gobierno de Catamarca" class="logo-imagen">
-                <span style="display:none; font-weight:600; align-items:center; gap:12px;">Catamarca<br><span style="font-size:0.7rem;">Gobierno</span></span>
+                <!-- LOGO CORREGIDO - TAMAÑO GRANDE para PC -->
+                <img src="logos_visityministerio.png" alt="Gobierno de Catamarca" class="logo-imagen">
                 <span style="font-weight:600;">Catamarca<br><span style="font-size:0.7rem;">Gobierno</span></span>
             </div>
             <div class="ministerio-text">
@@ -341,7 +342,7 @@
             </div>
         </div>
 
-        <!-- ZONA INFORMACIÓN AUTOMÁTICA (departamento, plazas disponibles, tipo) -->
+        <!-- ZONA INFORMACIÓN AUTOMÁTICA -->
         <div id="infoAlojamiento" class="info-alojamiento" style="display: none;">
             <div class="campo-auto">
                 <label>🏢 Departamento (automático)</label>
@@ -357,7 +358,7 @@
             </div>
         </div>
 
-        <!-- ZONA (OESTE, CENTRO, ESTE, SUR, NORTE) -->
+        <!-- ZONA GEOGRÁFICA -->
         <div class="form-group" id="zonaGroup" style="display: none;">
             <label>📍 Elegir zona geográfica <span class="label-required">*</span></label>
             <div class="radio-group" id="zonaRadios">
@@ -369,7 +370,7 @@
             </div>
         </div>
 
-        <!-- PLAZAS OCUPADAS (manual) -->
+        <!-- PLAZAS OCUPADAS -->
         <div class="form-group" id="ocupadasGroup" style="display: none;">
             <div class="plazas-row">
                 <div class="plazas-ocupadas">
@@ -395,25 +396,22 @@
 </div>
 
 <script>
-    // ---------- BASE DE DATOS SIMULADA DE ALOJAMIENTOS ----------
-    // Contiene: nombre, departamento, plazasDeclaradas, tipo, id único
+    // BASE DE DATOS DE ALOJAMIENTOS
     const alojamientosDB = [
-        { id: 1, nombre: "Cabañas del Valle", departamento: "Capital", plazasDeclaradas: 24, tipo: "Cabañas", zonaReferencia: "Centro" },
-        { id: 2, nombre: "Hotel Ancasti", departamento: "Ancasti", plazasDeclaradas: 48, tipo: "Hotel", zonaReferencia: "Este" },
-        { id: 3, nombre: "Hostel Wayra", departamento: "Andalgalá", plazasDeclaradas: 18, tipo: "Hostel", zonaReferencia: "Oeste" },
-        { id: 4, nombre: "Complejo Los Troncos", departamento: "Paclín", plazasDeclaradas: 32, tipo: "Cabañas", zonaReferencia: "Norte" },
-        { id: 5, nombre: "Gran Hotel Catamarca", departamento: "Capital", plazasDeclaradas: 120, tipo: "Hotel", zonaReferencia: "Centro" },
-        { id: 6, nombre: "La Posada del Sur", departamento: "Santa María", plazasDeclaradas: 22, tipo: "Otros", zonaReferencia: "Sur" },
-        { id: 7, nombre: "Eco Hostel Andino", departamento: "Belén", plazasDeclaradas: 15, tipo: "Hostel", zonaReferencia: "Oeste" },
-        { id: 8, nombre: "Refugio de Montaña", departamento: "Tinogasta", plazasDeclaradas: 10, tipo: "Otros", zonaReferencia: "Oeste" },
-        { id: 9, nombre: "Hotel Del Centro", departamento: "Capital", plazasDeclaradas: 56, tipo: "Hotel", zonaReferencia: "Centro" },
-        { id: 10, nombre: "Cabañas El Mirador", departamento: "Fray Mamerto Esquiú", plazasDeclaradas: 28, tipo: "Cabañas", zonaReferencia: "Este" }
+        { id: 1, nombre: "Cabañas del Valle", departamento: "Capital", plazasDeclaradas: 24, tipo: "Cabañas" },
+        { id: 2, nombre: "Hotel Ancasti", departamento: "Ancasti", plazasDeclaradas: 48, tipo: "Hotel" },
+        { id: 3, nombre: "Hostel Wayra", departamento: "Andalgalá", plazasDeclaradas: 18, tipo: "Hostel" },
+        { id: 4, nombre: "Complejo Los Troncos", departamento: "Paclín", plazasDeclaradas: 32, tipo: "Cabañas" },
+        { id: 5, nombre: "Gran Hotel Catamarca", departamento: "Capital", plazasDeclaradas: 120, tipo: "Hotel" },
+        { id: 6, nombre: "La Posada del Sur", departamento: "Santa María", plazasDeclaradas: 22, tipo: "Otros" },
+        { id: 7, nombre: "Eco Hostel Andino", departamento: "Belén", plazasDeclaradas: 15, tipo: "Hostel" },
+        { id: 8, nombre: "Refugio de Montaña", departamento: "Tinogasta", plazasDeclaradas: 10, tipo: "Otros" },
+        { id: 9, nombre: "Hotel Del Centro", departamento: "Capital", plazasDeclaradas: 56, tipo: "Hotel" },
+        { id: 10, nombre: "Cabañas El Mirador", departamento: "Fray Mamerto Esquiú", plazasDeclaradas: 28, tipo: "Cabañas" }
     ];
 
-    // Variables de estado del alojamiento seleccionado
     let alojamientoSeleccionado = null;
 
-    // Cargar el select de alojamientos
     function poblarSelectAlojamientos() {
         const select = document.getElementById('alojamientoSelect');
         select.innerHTML = '<option value="">-- Seleccione un alojamiento --</option>';
@@ -425,7 +423,6 @@
         });
     }
 
-    // Mostrar información del alojamiento luego de buscar
     function buscarYMostrarAlojamiento() {
         const select = document.getElementById('alojamientoSelect');
         const idSeleccionado = parseInt(select.value);
@@ -440,39 +437,28 @@
         }
         alojamientoSeleccionado = encontrado;
         
-        // Rellenar campos automáticos
         document.getElementById('departamentoAuto').innerText = encontrado.departamento;
         document.getElementById('plazasDisponiblesAuto').innerText = encontrado.plazasDeclaradas;
         document.getElementById('tipoAlojamientoAuto').innerText = encontrado.tipo;
         
-        // Mostrar bloques que estaban ocultos
         document.getElementById('infoAlojamiento').style.display = 'block';
         document.getElementById('zonaGroup').style.display = 'block';
         document.getElementById('ocupadasGroup').style.display = 'block';
         document.getElementById('emailGroup').style.display = 'block';
         document.getElementById('botonEnviarGroup').style.display = 'block';
         
-        // Limpiar radio de zona (selección previa) y poner default ninguno
         const radios = document.querySelectorAll('input[name="zona"]');
         radios.forEach(radio => radio.checked = false);
         
-        // Limpiar campos previos
         document.getElementById('plazasOcupadas').value = '';
         document.getElementById('emailCarga').value = '';
         
-        // Quitar mensajes previos
         const msgDiv = document.getElementById('mensajeFeedback');
         msgDiv.innerHTML = '';
     }
 
-    // Función para enviar los datos a Google Sheets (mediante fetch a Google Apps Script Web App)
-    // Para que funcione, debes crear un script de Google Apps Script, desplegarlo como Web App y pegar la URL aquí.
-    // INSTRUCCIONES: 
-    // 1. Crear una hoja de cálculo en Google Sheets.
-    // 2. Ir a Extensiones > Apps Script, pegar el código del backend (se provee abajo en comentarios).
-    // 3. Desplegar como Web App (Ejecutar como "Yo", acceso "Cualquiera").
-    // 4. Copiar la URL y reemplazar en la variable SCRIPT_URL.
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyPedb1xiecGILZ1MtJLqZpgz-bRY1UWXEsgQaHphtKyxue1qOIMF0TbJGE9x6lUbzg/exec";  
+    // IMPORTANTE: Reemplazar con tu URL de Google Apps Script
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyPedb1xiecGILZ1MtJLqZpgz-bRY1UWXEsgQaHphtKyxue1qOIMF0TbJGE9x6lUbzg/exec";
     
     async function enviarASheets() {
         if (!alojamientoSeleccionado) {
@@ -480,25 +466,25 @@
             return;
         }
         
-        // Validaciones
         const zonaSeleccionada = document.querySelector('input[name="zona"]:checked');
         if (!zonaSeleccionada) {
             alert('Debe seleccionar una zona (Oeste, Centro, Este, Sur o Norte).');
             return;
         }
+        
         const plazasOcupadasInput = document.getElementById('plazasOcupadas');
         let plazasOcupadas = parseInt(plazasOcupadasInput.value);
         if (isNaN(plazasOcupadas) || plazasOcupadas < 0) {
             alert('Ingrese un número válido para plazas ocupadas (0 o mayor).');
             return;
         }
+        
         const email = document.getElementById('emailCarga').value.trim();
         if (!email || !email.includes('@')) {
             alert('Ingrese un email válido de la persona que carga la información.');
             return;
         }
         
-        // Validar que las plazas ocupadas no superen las disponibles declaradas
         if (plazasOcupadas > alojamientoSeleccionado.plazasDeclaradas) {
             alert(`Las plazas ocupadas no pueden superar las plazas disponibles declaradas (${alojamientoSeleccionado.plazasDeclaradas}).`);
             return;
@@ -507,7 +493,6 @@
         const zona = zonaSeleccionada.value;
         const fechaCarga = new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' });
         
-        // Preparar objeto con todos los campos
         const registro = {
             alojamiento: alojamientoSeleccionado.nombre,
             departamento: alojamientoSeleccionado.departamento,
@@ -519,14 +504,12 @@
             tipo_alojamiento: alojamientoSeleccionado.tipo
         };
         
-        // Mostrar loading en botón
         const btn = document.getElementById('btnEnviar');
         const textoOriginal = btn.innerText;
         btn.innerText = 'Enviando...';
         btn.disabled = true;
         
         try {
-            // Enviar a Google Sheets mediante POST
             await fetch(SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors',
@@ -537,60 +520,27 @@
             const mensajeDiv = document.getElementById('mensajeFeedback');
             mensajeDiv.innerHTML = '<div class="mensaje-exito">✅ Datos registrados correctamente en Google Sheets. ¡Gracias!</div>';
             
-            // Reset opcional: limpiar formulario
             document.querySelectorAll('input[name="zona"]').forEach(r => r.checked = false);
             document.getElementById('plazasOcupadas').value = '';
             document.getElementById('emailCarga').value = '';
             
+            setTimeout(() => {
+                const msg = document.getElementById('mensajeFeedback');
+                if(msg.innerHTML.includes('correctamente')) setTimeout(() => msg.innerHTML = '', 4000);
+            }, 3000);
         } catch (error) {
             console.error(error);
             document.getElementById('mensajeFeedback').innerHTML = '<div style="color:#b91c1c; background:#fee2e2; padding:12px; border-radius:24px;">⚠️ Error de conexión. Revise que la URL del script de Google sea correcta y esté publicada.</div>';
         } finally {
             btn.innerText = textoOriginal;
             btn.disabled = false;
-            setTimeout(() => {
-                const msg = document.getElementById('mensajeFeedback');
-                if(msg.innerHTML.includes('correctamente')) setTimeout(() => msg.innerHTML = '', 4000);
-            }, 3000);
         }
     }
     
-    // Eventos
     document.getElementById('btnBuscar').addEventListener('click', buscarYMostrarAlojamiento);
     document.getElementById('btnEnviar').addEventListener('click', enviarASheets);
     
-    // Inicializar select al cargar la página
     poblarSelectAlojamientos();
-    
-    /* ========== CÓDIGO PARA APPS SCRIPT (Google Sheets) ==========
-    
-    // Pegar en el editor de scripts de la hoja de cálculo
-    function doPost(e) {
-      const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-      const data = JSON.parse(e.postData.contents);
-      
-      sheet.appendRow([
-        new Date(),                          // timestamp adicional
-        data.alojamiento,
-        data.departamento,
-        data.zona,
-        data.plazas_disponibles_declaradas,
-        data.plazas_ocupadas,
-        data.fecha_carga,
-        data.email_operador,
-        data.tipo_alojamiento
-      ]);
-      
-      return ContentService.createTextOutput(JSON.stringify({result: "ok"})).setMimeType(ContentService.MimeType.JSON);
-    }
-    
-    function doGet(e) {
-      return ContentService.createTextOutput("Servicio activo");
-    }
-    
-    // Luego desplegar como Web App (Ejecutar como: Yo, Acceso: Cualquiera)
-    */
-    
 </script>
 </body>
 </html>
