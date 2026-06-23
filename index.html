@@ -22,7 +22,7 @@
         }
 
         .form-container {
-            max-width: 680px;
+            max-width: 720px;
             width: 100%;
             margin: 0 auto;
             background: white;
@@ -221,27 +221,59 @@
 
         .radio-group {
             display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
+            flex-direction: column;
+            gap: 8px;
             margin-top: 8px;
         }
 
         .radio-option {
             display: flex;
-            align-items: center;
-            gap: 6px;
+            align-items: flex-start;
+            gap: 10px;
             background: #f4f7fa;
-            padding: 6px 14px;
-            border-radius: 40px;
+            padding: 10px 16px;
+            border-radius: 16px;
             cursor: pointer;
             font-size: 0.85rem;
+            transition: 0.15s;
+            border: 2px solid transparent;
+        }
+
+        .radio-option:hover {
+            background: #e8edf4;
+        }
+
+        .radio-option input[type="radio"]:checked + .radio-content {
+            font-weight: 500;
+        }
+
+        .radio-option:has(input:checked) {
+            border-color: #2b7a4b;
+            background: #e6f3ec;
         }
 
         .radio-option input {
             width: 18px;
             height: 18px;
-            margin: 0;
+            min-width: 18px;
+            margin-top: 2px;
             accent-color: #2b7a4b;
+        }
+
+        .radio-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .radio-title {
+            font-weight: 600;
+            color: #1e3a5f;
+        }
+
+        .radio-desc {
+            font-size: 0.75rem;
+            color: #5b6f82;
+            margin-top: 2px;
         }
 
         .fechas-row {
@@ -277,6 +309,12 @@
         .btn-submit:hover {
             background: #1e5e3a;
             transform: scale(0.98);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
         }
 
         .mensaje-exito {
@@ -328,6 +366,14 @@
             margin-left: 6px;
         }
 
+        .zona-marker {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+
         @media (max-width: 550px) {
             .search-wrapper {
                 flex-direction: column;
@@ -345,6 +391,9 @@
             }
             .fechas-row {
                 flex-direction: column;
+            }
+            .radio-option {
+                padding: 8px 12px;
             }
         }
     </style>
@@ -398,18 +447,49 @@
             </div>
         </div>
 
+        <!-- ZONAS GEOGRÁFICAS (ACTUALIZADAS) -->
         <div class="form-group" id="zonaGroup" style="display: none;">
             <label>📍 3. Elegir zona geográfica <span class="label-required">*</span></label>
             <div class="radio-group">
-                <label class="radio-option"><input type="radio" name="zona" value="Oeste"> Oeste</label>
-                <label class="radio-option"><input type="radio" name="zona" value="Centro"> Centro</label>
-                <label class="radio-option"><input type="radio" name="zona" value="Este"> Este</label>
-                <label class="radio-option"><input type="radio" name="zona" value="Sur"> Sur</label>
-                <label class="radio-option"><input type="radio" name="zona" value="Norte"> Norte</label>
+                <label class="radio-option">
+                    <input type="radio" name="zona" value="Puna">
+                    <span class="radio-content">
+                        <span class="radio-title">🏔️ Puna</span>
+                        <span class="radio-desc">Antofagasta de la Sierra (ADLS)</span>
+                    </span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="zona" value="Oeste">
+                    <span class="radio-content">
+                        <span class="radio-title">🌄 Oeste</span>
+                        <span class="radio-desc">Andalgalá · Belén · Pomán · Santa María · Tinogasta</span>
+                    </span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="zona" value="Este">
+                    <span class="radio-content">
+                        <span class="radio-title">🌿 Este</span>
+                        <span class="radio-desc">Ancasti · El Alto · La Paz · Santa Rosa</span>
+                    </span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="zona" value="Valle Central">
+                    <span class="radio-content">
+                        <span class="radio-title">🌾 Valle Central</span>
+                        <span class="radio-desc">Ambato · Capayán · Fray Mamerto Esquiú · Paclín · Valle Viejo</span>
+                    </span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="zona" value="Centro">
+                    <span class="radio-content">
+                        <span class="radio-title">🏙️ Centro</span>
+                        <span class="radio-desc">Capital</span>
+                    </span>
+                </label>
             </div>
         </div>
 
-        <!-- NUEVO: FECHAS DEL PERÍODO -->
+        <!-- FECHAS DEL PERÍODO -->
         <div id="fechasGroup" style="display: none;">
             <div class="fechas-row">
                 <div class="form-group">
@@ -426,7 +506,7 @@
             </div>
         </div>
 
-        <!-- NUEVO: TOTAL DE PERNOCTACIONES (reemplaza a "plazas ocupadas hoy") -->
+        <!-- TOTAL DE PERNOCTACIONES -->
         <div class="form-group" id="pernoctacionesGroup" style="display: none;">
             <label>✍️ 5. Total de pernoctaciones del período <span class="label-required">*</span></label>
             <input type="number" id="totalPernoctaciones" placeholder="Ej: 60" min="0" value="">
@@ -828,7 +908,7 @@
         
         const zonaSeleccionada = document.querySelector('input[name="zona"]:checked');
         if (!zonaSeleccionada) {
-            alert('Debe seleccionar una zona (Oeste, Centro, Este, Sur o Norte).');
+            alert('Debe seleccionar una zona geográfica.');
             return;
         }
         
