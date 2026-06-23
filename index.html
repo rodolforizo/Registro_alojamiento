@@ -355,25 +355,6 @@
             text-align: right;
         }
 
-        .badge-periodo {
-            display: inline-block;
-            background: #2b7a4b;
-            color: white;
-            padding: 2px 10px;
-            border-radius: 30px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            margin-left: 6px;
-        }
-
-        .zona-marker {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            margin-right: 6px;
-        }
-
         @media (max-width: 550px) {
             .search-wrapper {
                 flex-direction: column;
@@ -447,7 +428,7 @@
             </div>
         </div>
 
-        <!-- ZONAS GEOGRÁFICAS (ACTUALIZADAS) -->
+        <!-- ZONAS GEOGRÁFICAS -->
         <div class="form-group" id="zonaGroup" style="display: none;">
             <label>📍 3. Elegir zona geográfica <span class="label-required">*</span></label>
             <div class="radio-group">
@@ -528,7 +509,9 @@
 </div>
 
 <script>
-    // ==================== BASE DE DATOS DE ALOJAMIENTOS ====================
+    // ============================================================
+    // BASE DE DATOS DE ALOJAMIENTOS (242 alojamientos)
+    // ============================================================
     const alojamientosDB = [
         { id: 1, nombre: "Hotel Casino", departamento: "Capital", plazasDeclaradas: 144 },
         { id: 2, nombre: "Amerian Catamarca Park Hotel", departamento: "Capital", plazasDeclaradas: 150 },
@@ -774,8 +757,20 @@
         { id: 242, nombre: "Hostal Doña Dolores", departamento: "Pomán", plazasDeclaradas: 12 }
     ];
 
+    // ============================================================
+    // VARIABLES GLOBALES
+    // ============================================================
     let alojamientoSeleccionado = null;
     let alojamientosFiltrados = [];
+
+    // ============================================================
+    // URL DEL SCRIPT DE GOOGLE - ¡CAMBIAR POR TU URL!
+    // ============================================================
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyPedb1xiecGILZ1MtJLqZpgz-bRY1UWXEsgQaHphtKyxue1qOIMF0TbJGE9x6lUbzg/exec";
+
+    // ============================================================
+    // FUNCIONES DEL FORMULARIO
+    // ============================================================
 
     // Obtener departamentos únicos
     function obtenerDepartamentos() {
@@ -891,27 +886,24 @@
         return 0;
     }
 
-    document.getElementById('filtroDepartamento').addEventListener('change', filtrarAlojamientos);
-    document.getElementById('btnBuscar').addEventListener('click', buscarYMostrarAlojamiento);
-    document.getElementById('btnEnviar').addEventListener('click', enviarASheets);
-    
-    cargarFiltroDepartamentos();
-    filtrarAlojamientos();
-
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyPedb1xiecGILZ1MtJLqZpgz-bRY1UWXEsgQaHphtKyxue1qOIMF0TbJGE9x6lUbzg/exec";
-    
+    // ============================================================
+    // FUNCIÓN PARA ENVIAR DATOS A GOOGLE SHEETS (CORREGIDA)
+    // ============================================================
     async function enviarASheets() {
+        // Validar que se haya seleccionado un alojamiento
         if (!alojamientoSeleccionado) {
             alert('Primero busque y seleccione un alojamiento válido.');
             return;
         }
         
+        // Validar zona
         const zonaSeleccionada = document.querySelector('input[name="zona"]:checked');
         if (!zonaSeleccionada) {
             alert('Debe seleccionar una zona geográfica.');
             return;
         }
         
+        // Validar fechas
         const fechaInicio = document.getElementById('fechaInicio').value;
         const fechaFin = document.getElementById('fechaFin').value;
         if (!fechaInicio || !fechaFin) {
@@ -919,12 +911,14 @@
             return;
         }
         
+        // Calcular días
         const dias = calcularDias();
         if (dias < 1) {
             alert('La fecha de fin debe ser igual o posterior a la fecha de inicio.');
             return;
         }
         
+        // Validar pernoctaciones
         const totalPernoctacionesInput = document.getElementById('totalPernoctaciones');
         let totalPernoctaciones = parseInt(totalPernoctacionesInput.value);
         if (isNaN(totalPernoctaciones) || totalPernoctaciones < 0) {
@@ -932,21 +926,26 @@
             return;
         }
         
+        // Validar que no supere el máximo
         const maximoPosible = alojamientoSeleccionado.plazasDeclaradas * dias;
         if (totalPernoctaciones > maximoPosible) {
             alert(`El total de pernoctaciones (${totalPernoctaciones}) no puede superar las plazas disponibles (${alojamientoSeleccionado.plazasDeclaradas}) multiplicadas por los ${dias} días del período (máximo ${maximoPosible}).`);
             return;
         }
         
+        // Validar email
         const email = document.getElementById('emailCarga').value.trim();
         if (!email || !email.includes('@')) {
             alert('Ingrese un email válido de la persona que carga la información.');
             return;
         }
         
+        // Obtener zona
         const zona = zonaSeleccionada.value;
-        const fechaCarga = new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' });
         
+        // ============================================================
+        // CONSTRUIR EL OBJETO CON LOS DATOS - ¡NOMBRES CORRECTOS!
+        // ============================================================
         const registro = {
             alojamiento: alojamientoSeleccionado.nombre,
             departamento: alojamientoSeleccionado.departamento,
@@ -956,9 +955,11 @@
             fecha_fin: fechaFin,
             cantidad_dias: dias,
             total_pernoctaciones: totalPernoctaciones,
-            fecha_carga: fechaCarga,
             email_operador: email
         };
+        
+        // Mostrar en consola lo que se está enviando (para depuración)
+        console.log('📤 Enviando datos:', JSON.stringify(registro));
         
         const btn = document.getElementById('btnEnviar');
         const textoOriginal = btn.innerText;
@@ -966,37 +967,60 @@
         btn.disabled = true;
         
         try {
-            await fetch(SCRIPT_URL, {
+            // ============================================================
+            // ENVIAR CON mode: 'cors' PARA RECIBIR RESPUESTA
+            // ============================================================
+            const response = await fetch(SCRIPT_URL, {
                 method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
                 body: JSON.stringify(registro)
             });
             
-            const mensajeDiv = document.getElementById('mensajeFeedback');
-            mensajeDiv.innerHTML = `<div class="mensaje-exito">✅ Datos registrados correctamente en Google Sheets. <br> 
-            <strong>Período:</strong> ${fechaInicio} a ${fechaFin} (${dias} días) | 
-            <strong>Pernoctaciones:</strong> ${totalPernoctaciones} | 
-            <strong>Plazas × Días:</strong> ${maximoPosible}</div>`;
+            // Leer la respuesta del servidor
+            const result = await response.json();
+            console.log('📥 Respuesta del servidor:', result);
             
-            document.querySelectorAll('input[name="zona"]').forEach(r => r.checked = false);
-            document.getElementById('fechaInicio').value = '';
-            document.getElementById('fechaFin').value = '';
-            document.getElementById('totalPernoctaciones').value = '';
-            document.getElementById('emailCarga').value = '';
+            if (result.success) {
+                const mensajeDiv = document.getElementById('mensajeFeedback');
+                mensajeDiv.innerHTML = `<div class="mensaje-exito">✅ ${result.message}<br> 
+                <strong>Período:</strong> ${fechaInicio} a ${fechaFin} (${dias} días) | 
+                <strong>Pernoctaciones:</strong> ${totalPernoctaciones} | 
+                <strong>Ocupación:</strong> ${result.porcentaje_ocupacion ? result.porcentaje_ocupacion.toFixed(2) : '0'}%</div>`;
+                
+                // Limpiar campos
+                document.querySelectorAll('input[name="zona"]').forEach(r => r.checked = false);
+                document.getElementById('fechaInicio').value = '';
+                document.getElementById('fechaFin').value = '';
+                document.getElementById('totalPernoctaciones').value = '';
+                document.getElementById('emailCarga').value = '';
+            } else {
+                throw new Error(result.message || 'Error al guardar los datos');
+            }
             
-            setTimeout(() => {
-                if(mensajeDiv.innerHTML.includes('correctamente')) 
-                    setTimeout(() => mensajeDiv.innerHTML = '', 4000);
-            }, 3000);
         } catch (error) {
-            console.error(error);
-            document.getElementById('mensajeFeedback').innerHTML = '<div class="mensaje-error">⚠️ Error de conexión. Revise que la URL del script de Google sea correcta y esté publicada.</div>';
+            console.error('❌ Error:', error);
+            document.getElementById('mensajeFeedback').innerHTML = `<div class="mensaje-error">⚠️ Error: ${error.message}. Verifique la conexión y que el script esté publicado correctamente.</div>`;
         } finally {
             btn.innerText = textoOriginal;
             btn.disabled = false;
         }
     }
+
+    // ============================================================
+    // EVENTOS
+    // ============================================================
+    document.getElementById('filtroDepartamento').addEventListener('change', filtrarAlojamientos);
+    document.getElementById('btnBuscar').addEventListener('click', buscarYMostrarAlojamiento);
+    document.getElementById('btnEnviar').addEventListener('click', enviarASheets);
+    
+    // ============================================================
+    // INICIALIZACIÓN
+    // ============================================================
+    cargarFiltroDepartamentos();
+    filtrarAlojamientos();
 </script>
 </body>
 </html>
