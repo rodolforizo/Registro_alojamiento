@@ -766,19 +766,17 @@
     // ============================================================
     // URL DEL SCRIPT DE GOOGLE - ¡CAMBIAR POR TU URL!
     // ============================================================
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwI6x4Ntzc4poXzoCE69R49k3YpLAomKKBWSmrqHxU/dev";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyiCKBUIY9d5A80gEpfJRlX8M3aKyIpUiaRVTxU_egM13ej2tQHJPEFKWsXEzzcQjQ/exec";
 
     // ============================================================
     // FUNCIONES DEL FORMULARIO
     // ============================================================
 
-    // Obtener departamentos únicos
     function obtenerDepartamentos() {
         const deptos = [...new Set(alojamientosDB.map(a => a.departamento))];
         return deptos.sort();
     }
 
-    // Cargar filtro de departamentos
     function cargarFiltroDepartamentos() {
         const filtroSelect = document.getElementById('filtroDepartamento');
         const departamentos = obtenerDepartamentos();
@@ -792,7 +790,6 @@
         });
     }
 
-    // Filtrar alojamientos por departamento
     function filtrarAlojamientos() {
         const deptoSeleccionado = document.getElementById('filtroDepartamento').value;
         const selectAlojamiento = document.getElementById('alojamientoSelect');
@@ -887,7 +884,7 @@
     }
 
     // ============================================================
-    // FUNCIÓN PARA ENVIAR DATOS A GOOGLE SHEETS (CORREGIDA)
+    // FUNCIÓN PARA ENVIAR DATOS - CON no-cors (OBLIGATORIO)
     // ============================================================
     async function enviarASheets() {
         // Validar que se haya seleccionado un alojamiento
@@ -943,9 +940,7 @@
         // Obtener zona
         const zona = zonaSeleccionada.value;
         
-        // ============================================================
-        // CONSTRUIR EL OBJETO CON LOS DATOS - ¡NOMBRES CORRECTOS!
-        // ============================================================
+        // CONSTRUIR EL OBJETO CON LOS DATOS
         const registro = {
             alojamiento: alojamientoSeleccionado.nombre,
             departamento: alojamientoSeleccionado.departamento,
@@ -958,7 +953,7 @@
             email_operador: email
         };
         
-        // Mostrar en consola lo que se está enviando (para depuración)
+        // Mostrar en consola lo que se está enviando
         console.log('📤 Enviando datos:', JSON.stringify(registro));
         
         const btn = document.getElementById('btnEnviar');
@@ -968,37 +963,33 @@
         
         try {
             // ============================================================
-            // ENVIAR CON mode: 'cors' PARA RECIBIR RESPUESTA
+            // IMPORTANTE: USAR mode: 'no-cors' PARA APPS SCRIPT
             // ============================================================
             const response = await fetch(SCRIPT_URL, {
                 method: 'POST',
-                mode: 'cors',
+                mode: 'no-cors',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(registro)
             });
             
-            // Leer la respuesta del servidor
-            const result = await response.json();
-            console.log('📥 Respuesta del servidor:', result);
+            // Con 'no-cors' no podemos leer la respuesta
+            // Asumimos que funcionó si no hubo error
+            console.log('✅ Datos enviados correctamente (no-cors)');
             
-            if (result.success) {
-                const mensajeDiv = document.getElementById('mensajeFeedback');
-                mensajeDiv.innerHTML = `<div class="mensaje-exito">✅ ${result.message}<br> 
-                <strong>Período:</strong> ${fechaInicio} a ${fechaFin} (${dias} días) | 
-                <strong>Pernoctaciones:</strong> ${totalPernoctaciones} | 
-                <strong>Ocupación:</strong> ${result.porcentaje_ocupacion ? result.porcentaje_ocupacion.toFixed(2) : '0'}%</div>`;
-                
-                // Limpiar campos
-                document.querySelectorAll('input[name="zona"]').forEach(r => r.checked = false);
-                document.getElementById('fechaInicio').value = '';
-                document.getElementById('fechaFin').value = '';
-                document.getElementById('totalPernoctaciones').value = '';
-                document.getElementById('emailCarga').value = '';
-            } else {
-                throw new Error(result.message || 'Error al guardar los datos');
-            }
+            const mensajeDiv = document.getElementById('mensajeFeedback');
+            mensajeDiv.innerHTML = `<div class="mensaje-exito">✅ Datos enviados correctamente.<br> 
+            <strong>Período:</strong> ${fechaInicio} a ${fechaFin} (${dias} días) | 
+            <strong>Pernoctaciones:</strong> ${totalPernoctaciones}<br>
+            <span style="font-size:0.8rem; color:#5b6f82;">📌 Verifique en Google Sheets que los datos se hayan guardado.</span></div>`;
+            
+            // Limpiar campos
+            document.querySelectorAll('input[name="zona"]').forEach(r => r.checked = false);
+            document.getElementById('fechaInicio').value = '';
+            document.getElementById('fechaFin').value = '';
+            document.getElementById('totalPernoctaciones').value = '';
+            document.getElementById('emailCarga').value = '';
             
         } catch (error) {
             console.error('❌ Error:', error);
