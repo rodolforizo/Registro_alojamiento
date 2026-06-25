@@ -368,18 +368,6 @@
             font-weight: 500;
         }
 
-        .mensaje-advertencia {
-            background: #fff3cd;
-            color: #856404;
-            padding: 12px;
-            border-radius: 24px;
-            margin-top: 16px;
-            text-align: center;
-            font-size: 0.85rem;
-            font-weight: 500;
-            border: 1px solid #ffc107;
-        }
-
         footer {
             font-size: 0.7rem;
             text-align: center;
@@ -554,10 +542,6 @@
         <div class="form-group" id="emailGroup" style="display: none;">
             <label>📧 6. Email de la persona que carga la información <span class="label-required">*</span></label>
             <input type="email" id="emailCarga" placeholder="operador@turismo.gob.ar" autocomplete="email">
-            <span class="label-help" style="margin-top:4px;">
-                💡 <strong>Para este evento:</strong> Cada alojamiento debe cargar <strong>una sola vez</strong> el registro del fin de semana. 
-                Si intenta cargar dos veces con el mismo email, el sistema se lo impedirá.
-            </span>
         </div>
 
         <div class="form-actions" id="botonEnviarGroup" style="display: none;">
@@ -944,40 +928,6 @@
     }
 
     // ============================================================
-    // FUNCIÓN PARA VERIFICAR SI EL EMAIL YA FUE USADO (localStorage)
-    // ============================================================
-    function verificarEmailDuplicado(email) {
-        const clave = 'registros_enviados';
-        let registros = JSON.parse(localStorage.getItem(clave)) || [];
-        
-        // Buscar si el email ya existe
-        const existe = registros.some(r => r.email === email);
-        
-        if (existe) {
-            // Verificar si pasaron más de 5 minutos (opcional)
-            const ultimoRegistro = registros.find(r => r.email === email);
-            const ahora = Date.now();
-            const diferencia = ahora - ultimoRegistro.timestamp;
-            
-            // Si pasaron más de 5 minutos, permitir nuevo envío (por si el operador necesita corregir)
-            if (diferencia < 5 * 60 * 1000) {
-                return { permitido: false, mensaje: 'Este email ya fue utilizado para cargar un registro en los últimos 5 minutos. Si necesita corregir datos, espere unos minutos o contacte al administrador.' };
-            } else {
-                // Actualizar timestamp
-                const index = registros.findIndex(r => r.email === email);
-                registros[index].timestamp = ahora;
-                localStorage.setItem(clave, JSON.stringify(registros));
-                return { permitido: true, mensaje: '' };
-            }
-        }
-        
-        // Si no existe, agregar
-        registros.push({ email: email, timestamp: Date.now() });
-        localStorage.setItem(clave, JSON.stringify(registros));
-        return { permitido: true, mensaje: '' };
-    }
-
-    // ============================================================
     // FUNCIÓN PARA ENVIAR DATOS - CON no-cors (OBLIGATORIO)
     // ============================================================
     async function enviarASheets() {
@@ -1028,16 +978,6 @@
         const email = document.getElementById('emailCarga').value.trim();
         if (!email || !email.includes('@')) {
             alert('Ingrese un email válido de la persona que carga la información.');
-            return;
-        }
-        
-        // ============================================================
-        // VERIFICAR DUPLICADO POR EMAIL (solo para el evento concreto)
-        // ============================================================
-        const resultadoVerificacion = verificarEmailDuplicado(email);
-        if (!resultadoVerificacion.permitido) {
-            const mensajeDiv = document.getElementById('mensajeFeedback');
-            mensajeDiv.innerHTML = `<div class="mensaje-advertencia">⚠️ ${resultadoVerificacion.mensaje}</div>`;
             return;
         }
         
