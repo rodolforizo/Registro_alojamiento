@@ -5,7 +5,249 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Registro de Ocupación - Alojamientos Catamarca</title>
     <style>
-        /* (Mismo CSS que tenías, solo agrego un detalle para la categoría) */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background: #eef2f5;
+            padding: 2rem 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .form-container {
+            max-width: 720px;
+            width: 100%;
+            margin: 0 auto;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .header-logo {
+            background: #ffffff;
+            padding: 1.5rem 1.8rem 0.8rem 1.8rem;
+            border-bottom: 1px solid #e9edf2;
+            text-align: center;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo-gobierno {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #f9fafc;
+            padding: 6px 16px 6px 12px;
+            border-radius: 60px;
+        }
+
+        .logo-imagen {
+            height: 110px;
+            width: auto;
+            max-width: 200px;
+            object-fit: contain;
+        }
+
+        .ministerio-text {
+            text-align: right;
+            font-size: 0.8rem;
+            line-height: 1.3;
+            color: #1e3a5f;
+        }
+
+        .ministerio-text strong {
+            font-size: 0.9rem;
+            display: block;
+            font-weight: 600;
+        }
+
+        .badge-catamarca {
+            background: #2b5e3b;
+            color: white;
+            padding: 4px 14px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            display: inline-block;
+            margin-top: 5px;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1e2f3e;
+            margin: 0.75rem 0 0.2rem 0;
+        }
+
+        .subtitulo {
+            color: #5b6f82;
+            font-size: 0.85rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .form-body {
+            padding: 1.8rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            font-size: 0.85rem;
+            margin-bottom: 0.4rem;
+            color: #1f3b4c;
+        }
+
+        .label-required {
+            color: #c2410c;
+            font-size: 0.7rem;
+            font-weight: normal;
+        }
+
+        .label-help {
+            display: block;
+            font-weight: 400;
+            font-size: 0.75rem;
+            color: #5b6f82;
+            margin-top: 0.2rem;
+            background: #f0f4f8;
+            padding: 6px 12px;
+            border-radius: 12px;
+            line-height: 1.5;
+        }
+
+        .label-help strong {
+            color: #1e3a5f;
+        }
+
+        .label-help .destacado {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 8px 12px;
+            border-radius: 6px;
+            display: block;
+            margin-top: 8px;
+            font-weight: 500;
+            color: #856404;
+            font-size: 0.8rem;
+        }
+
+        .label-help .ejemplo-familia {
+            background: #e8f0fe;
+            border-left: 4px solid #1a73e8;
+            padding: 8px 12px;
+            border-radius: 6px;
+            display: block;
+            margin-top: 6px;
+            font-weight: 500;
+            color: #0d3b66;
+            font-size: 0.8rem;
+        }
+
+        .filtro-group {
+            background: #f0f4f8;
+            padding: 1rem;
+            border-radius: 20px;
+            margin-bottom: 1.5rem;
+        }
+
+        .filtro-group label {
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #1e4663;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 12px 14px;
+            font-size: 0.95rem;
+            border: 1px solid #cfdde6;
+            border-radius: 18px;
+            background: #ffffff;
+            transition: 0.2s;
+            outline: none;
+        }
+
+        select:focus, input:focus {
+            border-color: #2b7a4b;
+            box-shadow: 0 0 0 3px rgba(43, 122, 75, 0.15);
+        }
+
+        .search-wrapper {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-wrapper select {
+            flex: 3;
+        }
+
+        .btn-buscar {
+            background: #1e4663;
+            color: white;
+            border: none;
+            padding: 0 1.6rem;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            white-space: nowrap;
+            height: 46px;
+            flex: 1;
+        }
+
+        .btn-buscar:hover {
+            background: #0f2f46;
+        }
+
+        .info-alojamiento {
+            background: #f8fafd;
+            border-radius: 24px;
+            padding: 0.2rem 1rem 1rem 1rem;
+            margin-top: 0.8rem;
+            border: 1px solid #e2edf2;
+        }
+
+        .campo-auto {
+            margin: 0.8rem 0;
+        }
+
+        .campo-auto label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #4b6a7c;
+            margin-bottom: 0.2rem;
+        }
+
+        .valor-auto {
+            background: #ffffff;
+            padding: 10px 12px;
+            border-radius: 18px;
+            border: 1px solid #e2e8f0;
+            font-weight: 500;
+            color: #1e2f3e;
+        }
+
         .categoria-badge {
             display: inline-block;
             background: #e9ecef;
@@ -14,6 +256,165 @@
             font-size: 0.75rem;
             color: #495057;
             margin-left: 8px;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            background: #f4f7fa;
+            padding: 10px 16px;
+            border-radius: 16px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: 0.15s;
+            border: 2px solid transparent;
+        }
+
+        .radio-option:hover {
+            background: #e8edf4;
+        }
+
+        .radio-option input[type="radio"]:checked + .radio-content {
+            font-weight: 500;
+        }
+
+        .radio-option:has(input:checked) {
+            border-color: #2b7a4b;
+            background: #e6f3ec;
+        }
+
+        .radio-option input {
+            width: 18px;
+            height: 18px;
+            min-width: 18px;
+            margin-top: 2px;
+            accent-color: #2b7a4b;
+        }
+
+        .radio-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .radio-title {
+            font-weight: 600;
+            color: #1e3a5f;
+        }
+
+        .radio-desc {
+            font-size: 0.75rem;
+            color: #5b6f82;
+            margin-top: 2px;
+        }
+
+        .fechas-row {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .fechas-row .form-group {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .form-actions {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .btn-submit {
+            background: #2b7a4b;
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 60px;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.2s;
+        }
+
+        .btn-submit:hover {
+            background: #1e5e3a;
+            transform: scale(0.98);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .mensaje-exito {
+            background: #e1f7e8;
+            color: #146b3a;
+            padding: 12px;
+            border-radius: 24px;
+            margin-top: 16px;
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .mensaje-error {
+            background: #fee2e2;
+            color: #b91c1c;
+            padding: 12px;
+            border-radius: 24px;
+            margin-top: 16px;
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        footer {
+            font-size: 0.7rem;
+            text-align: center;
+            padding: 1rem;
+            color: #8ba0ae;
+            background: #fafcff;
+            border-top: 1px solid #edf2f7;
+        }
+
+        .contador {
+            font-size: 0.75rem;
+            color: #5b6f82;
+            margin-top: 0.3rem;
+            text-align: right;
+        }
+
+        @media (max-width: 550px) {
+            .search-wrapper {
+                flex-direction: column;
+            }
+            .btn-buscar {
+                width: 100%;
+                padding: 12px;
+            }
+            .logo-area {
+                flex-direction: column;
+                align-items: center;
+            }
+            .logo-imagen {
+                height: 70px;
+            }
+            .fechas-row {
+                flex-direction: column;
+            }
+            .radio-option {
+                padding: 8px 12px;
+            }
         }
     </style>
 </head>
@@ -48,7 +449,7 @@
             <label>🔍 2. Buscar alojamiento <span class="label-required">*</span></label>
             <div class="search-wrapper">
                 <select id="alojamientoSelect">
-                    <option value="">-- Cargando alojamientos... --</option>
+                    <option value="">-- Seleccione un departamento primero --</option>
                 </select>
                 <button type="button" id="btnBuscar" class="btn-buscar">Buscar</button>
             </div>
@@ -168,52 +569,282 @@
 
 <script>
     // ============================================================
-    // CONFIGURACIÓN
+    // BASE DE DATOS DE ALOJAMIENTOS (ACTUALIZADA CON CATEGORÍA)
     // ============================================================
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyiCKBUIY9d5A80gEpfJRlX8M3aKyIpUiaRVTxU_egM13ej2tQHJPEFKWsXEzzcQjQ/exec"; // ¡CAMBIAR POR TU URL!
+    const alojamientosDB = [
+        // ===== CAPITAL (Zona: Capital) =====
+        { id: 1, nombre: "Hotel Casino", departamento: "Capital", categoria: "Hotel 4 estrellas", plazasDeclaradas: 144 },
+        { id: 2, nombre: "Amerian Catamarca Park Hotel", departamento: "Capital", categoria: "Hotel 4 estrellas", plazasDeclaradas: 150 },
+        { id: 3, nombre: "Hotel Ancasti", departamento: "Capital", categoria: "Hotel 3 estrellas", plazasDeclaradas: 140 },
+        { id: 4, nombre: "Grand Hotel", departamento: "Capital", categoria: "Hotel 3 estrellas", plazasDeclaradas: 74 },
+        { id: 5, nombre: "Hotel Arenales", departamento: "Capital", categoria: "Hotel 3 estrellas", plazasDeclaradas: 120 },
+        { id: 6, nombre: "Coral Hotel", departamento: "Capital", categoria: "Hotel 3 estrellas", plazasDeclaradas: 225 },
+        { id: 7, nombre: "Hotel Inti Huasi", departamento: "Capital", categoria: "Hotel 3 estrellas", plazasDeclaradas: 110 },
+        { id: 8, nombre: "Hotel Suma Huasi", departamento: "Capital", categoria: "Hotel 2 estrellas", plazasDeclaradas: 96 },
+        { id: 9, nombre: "Hotel Pucará", departamento: "Capital", categoria: "Hotel 2 estrellas", plazasDeclaradas: 110 },
+        { id: 10, nombre: "Hotel Atahualpa", departamento: "Capital", categoria: "Hotel 1 estrella", plazasDeclaradas: 45 },
+        { id: 11, nombre: "Hotel El Shincal 2", departamento: "Capital", categoria: "Hotel 1 estrella", plazasDeclaradas: 50 },
+        { id: 12, nombre: "Hotel San Martín", departamento: "Capital", categoria: "Hotel 1 estrella", plazasDeclaradas: 55 },
+        { id: 13, nombre: "H1 Apartments Hotel", departamento: "Capital", categoria: "Apart Hotel", plazasDeclaradas: 90 },
+        { id: 14, nombre: "La Alameda Apart Hotel", departamento: "Capital", categoria: "Apart Hotel", plazasDeclaradas: 64 },
+        { id: 15, nombre: "Apart Hotel La Concepción", departamento: "Capital", categoria: "Apart Hotel", plazasDeclaradas: 25 },
+        { id: 16, nombre: "Catamarca Apart", departamento: "Capital", categoria: "Apart Hotel", plazasDeclaradas: 25 },
+        { id: 17, nombre: "Apart Hotel Urbanus Suites", departamento: "Capital", categoria: "Apart Hotel", plazasDeclaradas: 14 },
+        { id: 18, nombre: "Altitud Apart", departamento: "Capital", categoria: "Apart Hotel", plazasDeclaradas: 20 },
+        { id: 19, nombre: "Cabañas Samay", departamento: "Capital", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 33 },
+        { id: 20, nombre: "Residencial Mariangel", departamento: "Capital", categoria: "Residencial Categoría A", plazasDeclaradas: 27 },
+        { id: 21, nombre: "Residencial Shincal 1", departamento: "Capital", categoria: "Residencial Categoría A", plazasDeclaradas: 80 },
+        { id: 22, nombre: "Residencial Inca Huasi", departamento: "Capital", categoria: "Residencial Categoría A", plazasDeclaradas: 28 },
+        { id: 23, nombre: "Residencial Delgado", departamento: "Capital", categoria: "Residencial Categoría B", plazasDeclaradas: 47 },
+        { id: 24, nombre: "Residencial Avenida", departamento: "Capital", categoria: "Residencial Categoría A", plazasDeclaradas: 50 },
+        { id: 25, nombre: "Residencial Menen", departamento: "Capital", categoria: "Residencial sin Categoría", plazasDeclaradas: 37 },
+        { id: 26, nombre: "Hostal Atix", departamento: "Capital", categoria: "Hostals", plazasDeclaradas: 20 },
+        { id: 27, nombre: "Meke's Bed and Breakfast", departamento: "Capital", categoria: "Bed & Breakfast", plazasDeclaradas: 14 },
+        { id: 28, nombre: "La Casita Hostel & Suite", departamento: "Capital", categoria: "Hostels", plazasDeclaradas: 6 },
+        { id: 29, nombre: "Hospedaje El Peregrino", departamento: "Capital", categoria: "Hospedaje", plazasDeclaradas: 636 },
+        { id: 30, nombre: "Apart Chacabuco", departamento: "Capital", categoria: "Apart Hotel", plazasDeclaradas: 31 },
+        { id: 31, nombre: "ALMAMARKA CABAÑAS DE ADOBE", departamento: "Capital", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 36 },
+        // ===== VALLE CENTRAL (Ambato, Capayán, FME, Paclín, Valle Viejo) =====
+        { id: 32, nombre: "Hostería Provincial El Bolsón", departamento: "Ambato", categoria: "Hostería Sin Categoría", plazasDeclaradas: 27 },
+        { id: 33, nombre: "Altos de El Bolsón", departamento: "Ambato", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 12 },
+        { id: 34, nombre: "La Posada de Celestino", departamento: "Ambato", categoria: "Posada", plazasDeclaradas: 15 },
+        { id: 35, nombre: "Hostería El Rodeo", departamento: "Ambato", categoria: "Hostería Sin Categoría", plazasDeclaradas: 60 },
+        { id: 36, nombre: "Cabaña de Montaña", departamento: "Ambato", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 37 },
+        { id: 37, nombre: "Lo de Angelita", departamento: "Ambato", categoria: "Departamento", plazasDeclaradas: 15 },
+        { id: 38, nombre: "Cabañas Las Moras", departamento: "Ambato", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 17 },
+        { id: 39, nombre: "Terrazas del Gracián", departamento: "Ambato", categoria: "Alojamiento", plazasDeclaradas: 38 },
+        { id: 40, nombre: "Hostería Municipal de La Puerta", departamento: "Ambato", categoria: "Hostería Sin Categoría", plazasDeclaradas: 18 },
+        { id: 41, nombre: "Katana Cabañas", departamento: "Ambato", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 47 },
+        { id: 42, nombre: "Hostal las Dos A", departamento: "Ambato", categoria: "Hostals", plazasDeclaradas: 34 },
+        { id: 43, nombre: "Complejo Turístico La Constancia", departamento: "Ambato", categoria: "Departamento", plazasDeclaradas: 40 },
+        { id: 44, nombre: "Cabañas Los Alpinos", departamento: "Ambato", categoria: "Cabañas Sin categoría", plazasDeclaradas: 60 },
+        { id: 45, nombre: "Posada Las Salvias", departamento: "Ambato", categoria: "Posada", plazasDeclaradas: 29 },
+        { id: 46, nombre: "Hospedaje Cóndor Huasi", departamento: "Ambato", categoria: "Hospedaje", plazasDeclaradas: 25 },
+        { id: 47, nombre: "Complejo Turistico Las Juntas", departamento: "Ambato", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 72 },
+        { id: 48, nombre: "Cabañas Mis Montañas", departamento: "Ambato", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 20 },
+        { id: 49, nombre: "Complejo Cabañas Los Palominos", departamento: "Ambato", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 24 },
+        { id: 50, nombre: "Cabañas Aras del Cerro", departamento: "Ambato", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 30 },
+        { id: 51, nombre: "Albergue Camping Educativo Las Juntas", departamento: "Ambato", categoria: "Albergue", plazasDeclaradas: 90 },
+        { id: 52, nombre: "Posada Niña Juana", departamento: "Fray M. Esquiú", categoria: "Posada", plazasDeclaradas: 21 },
+        { id: 53, nombre: "Cabañas La Alcahuisa", departamento: "Fray M. Esquiú", categoria: "Cabañas Sin categoría", plazasDeclaradas: 30 },
+        { id: 54, nombre: "Hotel Don Oresttes", departamento: "Fray M. Esquiú", categoria: "Hotel sin categoría", plazasDeclaradas: 98 },
+        { id: 55, nombre: "Hospedaje Las Pirquitas", departamento: "Fray M. Esquiú", categoria: "Hospedaje", plazasDeclaradas: 36 },
+        { id: 56, nombre: "Cabañas Las Lomitas", departamento: "Fray M. Esquiú", categoria: "Cabañas Sin categoría", plazasDeclaradas: 40 },
+        { id: 57, nombre: "Hostería Municipal Las Pirquitas", departamento: "Fray M. Esquiú", categoria: "Hostería Sin Categoría", plazasDeclaradas: 12 },
+        { id: 58, nombre: "Don Demetrio", departamento: "Fray M. Esquiú", categoria: "Cabañas Sin categoría", plazasDeclaradas: 11 },
+        { id: 59, nombre: "Cabañas La Gringa", departamento: "Fray M. Esquiú", categoria: "Cabañas Sin categoría", plazasDeclaradas: 15 },
+        { id: 60, nombre: "Cabaña Paraíso Colla", departamento: "Fray M. Esquiú", categoria: "Cabañas Sin categoría", plazasDeclaradas: 10 },
+        { id: 61, nombre: "Posada Pomancillo", departamento: "Fray M. Esquiú", categoria: "Alquiler Temporario", plazasDeclaradas: 20 },
+        { id: 62, nombre: "Hostería Valle Viejo", departamento: "Valle Viejo", categoria: "Hostería 1 Estrella", plazasDeclaradas: 25 },
+        { id: 63, nombre: "Hostería Nuestra Tierra", departamento: "Valle Viejo", categoria: "Hostería Sin Categoría", plazasDeclaradas: 30 },
+        { id: 64, nombre: "Finca El Recuerdo", departamento: "Valle Viejo", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 22 },
+        { id: 65, nombre: "Cabañas Valles del Labrador", departamento: "Valle Viejo", categoria: "Cabañas 2 Estrellas", plazasDeclaradas: 96 },
+        { id: 66, nombre: "Cabañas Valle Hermoso", departamento: "Valle Viejo", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 72 },
+        { id: 67, nombre: "Cabañas Quinta Las Ruedas", departamento: "Valle Viejo", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 27 },
+        { id: 68, nombre: "Cabañas El Aquí", departamento: "Valle Viejo", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 16 },
+        { id: 69, nombre: "Las Catalinas", departamento: "Valle Viejo", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 25 },
+        { id: 70, nombre: "Hostería Cuesta El Portezuelo", departamento: "Valle Viejo", categoria: "Hostería Sin Categoría", plazasDeclaradas: 16 },
+        { id: 71, nombre: "Luceros del Alba", departamento: "Valle Viejo", categoria: "Alquiler Temporario", plazasDeclaradas: 22 },
+        { id: 72, nombre: "Hostería Municipal La Merced", departamento: "Paclín", categoria: "Hostería Sin Categoría", plazasDeclaradas: 90 },
+        { id: 73, nombre: "Hostería Balcosna", departamento: "Paclín", categoria: "Hostería Sin Categoría", plazasDeclaradas: 40 },
+        { id: 74, nombre: "Hostería Loma Hermosa", departamento: "Paclín", categoria: "Hostería Sin Categoría", plazasDeclaradas: 26 },
+        { id: 75, nombre: "Cabañas Villa Celina", departamento: "Paclín", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 18 },
+        { id: 76, nombre: "Cabañas Finca Don Jorge", departamento: "Paclín", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 14 },
+        { id: 77, nombre: "Cabañas Arakuku", departamento: "Paclín", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 22 },
+        { id: 78, nombre: "Lodge La Ceiba", departamento: "Paclín", categoria: "Lodge", plazasDeclaradas: 16 },
+        { id: 79, nombre: "Complejo Turístico de APUNCa", departamento: "Paclín", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 21 },
+        { id: 80, nombre: "Hostería Municipal Niquijas", departamento: "Capayán", categoria: "Hostería Sin Categoría", plazasDeclaradas: 32 },
+        { id: 81, nombre: "Hostería y Spa La Concepción S. A.", departamento: "Capayán", categoria: "Hostería Sin Categoría", plazasDeclaradas: 30 },
+        { id: 82, nombre: "La Aguada", departamento: "Capayán", categoria: "Alojamiento", plazasDeclaradas: 26 },
+        { id: 83, nombre: "Escape Urbano", departamento: "Capayán", categoria: "Alojamiento", plazasDeclaradas: 8 },
+        // ===== PUNA (ADLS) =====
+        { id: 84, nombre: "Hostería Municipal de Antofagasta", departamento: "ADLS", categoria: "Hostería Sin Categoría", plazasDeclaradas: 90 },
+        { id: 85, nombre: "Hostería Pucará", departamento: "ADLS", categoria: "Hostería Sin Categoría", plazasDeclaradas: 36 },
+        { id: 86, nombre: "Hostería Pueblo del Sol", departamento: "ADLS", categoria: "Hostería Sin Categoría", plazasDeclaradas: 20 },
+        { id: 87, nombre: "Jalen Apart Hotel", departamento: "ADLS", categoria: "Apart Hotel", plazasDeclaradas: 10 },
+        { id: 88, nombre: "El Coplero", departamento: "ADLS", categoria: "Hospedaje", plazasDeclaradas: 11 },
+        { id: 89, nombre: "Famana", departamento: "ADLS", categoria: "Hospedaje", plazasDeclaradas: 9 },
+        { id: 90, nombre: "Casa de Piedra", departamento: "ADLS", categoria: "Hospedaje", plazasDeclaradas: 22 },
+        { id: 91, nombre: "Hostería de Altura El Peñón", departamento: "ADLS", categoria: "Hostería 2 Estrellas", plazasDeclaradas: 20 },
+        { id: 92, nombre: "La Punita", departamento: "ADLS", categoria: "Hospedaje", plazasDeclaradas: 12 },
+        { id: 93, nombre: "Los Aires De La Puna", departamento: "ADLS", categoria: "Hospedaje", plazasDeclaradas: 22 },
+        { id: 94, nombre: "Don Carmelo", departamento: "ADLS", categoria: "Hospedaje", plazasDeclaradas: 20 },
+        { id: 95, nombre: "Cabaña La Pómez", departamento: "ADLS", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 14 },
+        { id: 96, nombre: "Patta Tickan", departamento: "ADLS", categoria: "Hospedaje", plazasDeclaradas: 24 },
+        // ===== ESTE (Ancasti, El Alto, La Paz, Santa Rosa) =====
+        { id: 97, nombre: "Hotel Rivadavia", departamento: "La Paz", categoria: "Hotel sin categoría", plazasDeclaradas: 38 },
+        { id: 98, nombre: "Tula Hotel", departamento: "La Paz", categoria: "Hotel sin categoría", plazasDeclaradas: 36 },
+        { id: 99, nombre: "Residencial Tu Recreo", departamento: "La Paz", categoria: "Residencial Sin Categoría", plazasDeclaradas: 20 },
+        { id: 100, nombre: "Residencial Recreo", departamento: "La Paz", categoria: "Residencial sin categoría", plazasDeclaradas: 11 },
+        { id: 101, nombre: "Residencial Las Manos", departamento: "La Paz", categoria: "Residencial sin categoría", plazasDeclaradas: 26 },
+        { id: 102, nombre: "Residencial Del Valle", departamento: "La Paz", categoria: "Residencial sin Categoría", plazasDeclaradas: 16 },
+        { id: 103, nombre: "Hostería Municipal Inti Punku", departamento: "La Paz", categoria: "Hostería Sin Categoría", plazasDeclaradas: 20 },
+        { id: 104, nombre: "Hostería Municipal Ancasti", departamento: "Ancasti", categoria: "Hostería Sin Categoría", plazasDeclaradas: 25 },
+        { id: 105, nombre: "Cabaña Pircas Viejas", departamento: "Ancasti", categoria: "Cabañas sin Categoría", plazasDeclaradas: 8 },
+        { id: 106, nombre: "Cabañas El Puesto de López", departamento: "Ancasti", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 12 },
+        { id: 107, nombre: "Hostería Huasi Guayamba", departamento: "El Alto", categoria: "Hostería Sin Categoría", plazasDeclaradas: 16 },
+        { id: 108, nombre: "Hostería Guayamba", departamento: "El Alto", categoria: "Hostería Sin Categoría", plazasDeclaradas: 25 },
+        { id: 109, nombre: "Cabañas el Remanso", departamento: "El Alto", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 16 },
+        { id: 110, nombre: "Hostería Municipal de Tapso", departamento: "El Alto", categoria: "Hostería Sin Categoría", plazasDeclaradas: 27 },
+        { id: 111, nombre: "Hotel Los Altos", departamento: "Santa Rosa", categoria: "Hotel 1 estrella", plazasDeclaradas: 49 },
+        { id: 112, nombre: "Hotel D'Artagnan", departamento: "Santa Rosa", categoria: "Hostería Sin Categoría", plazasDeclaradas: 18 },
+        { id: 113, nombre: "Hotel La Posada del Cazador", departamento: "Santa Rosa", categoria: "Hotel sin categoría", plazasDeclaradas: 27 },
+        { id: 114, nombre: "Cabañas La Mercedita", departamento: "Santa Rosa", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 4 },
+        { id: 115, nombre: "Hostería Alijilán", departamento: "Santa Rosa", categoria: "Hostería Sin categoría", plazasDeclaradas: 42 },
+        // ===== OESTE (Andalgalá, Belén, Pomán, Santa María, Tinogasta) =====
+        { id: 116, nombre: "Hospedaje Casa de Campo El Fortín", departamento: "Andalgalá", categoria: "Hospedaje", plazasDeclaradas: 22 },
+        { id: 117, nombre: "Complejo Valle Hermoso Yunka Suma", departamento: "Andalgalá", categoria: "Alojamiento", plazasDeclaradas: 40 },
+        { id: 118, nombre: "Complejo Habitacional El Lindero", departamento: "Andalgalá", categoria: "Alojamiento", plazasDeclaradas: 45 },
+        { id: 119, nombre: "Cabañas Mirador del Aconquija", departamento: "Andalgalá", categoria: "Cabañas 2 Estrellas", plazasDeclaradas: 15 },
+        { id: 120, nombre: "Hotel Gran Pucará", departamento: "Andalgalá", categoria: "Hotel Sin Categoría", plazasDeclaradas: 62 },
+        { id: 121, nombre: "Hospedaje Resto Bar il Nonno", departamento: "Andalgalá", categoria: "Hospedaje", plazasDeclaradas: 36 },
+        { id: 122, nombre: "Cabañas Portal del Nevado", departamento: "Andalgalá", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 20 },
+        { id: 123, nombre: "Hotel Plaza Andalgalá S.R.L", departamento: "Andalgalá", categoria: "Hotel Sin Categoría", plazasDeclaradas: 94 },
+        { id: 124, nombre: "Hotel de Turismo Santa Rita", departamento: "Andalgalá", categoria: "Hotel Sin Categoría", plazasDeclaradas: 36 },
+        { id: 125, nombre: "Hotel Confort", departamento: "Andalgalá", categoria: "Apart Hotel", plazasDeclaradas: 60 },
+        { id: 126, nombre: "Hotel Boutique HB", departamento: "Andalgalá", categoria: "Hotel Sin Categoría", plazasDeclaradas: 20 },
+        { id: 127, nombre: "Hotel Aquasol", departamento: "Andalgalá", categoria: "Hotel Sin Categoría", plazasDeclaradas: 50 },
+        { id: 128, nombre: "Hotel Aires del Nevado", departamento: "Andalgalá", categoria: "Hotel Sin Categoría", plazasDeclaradas: 58 },
+        { id: 129, nombre: "Casona Hotel La Vuelta de Olegario", departamento: "Andalgalá", categoria: "Hostería Sin Categoría", plazasDeclaradas: 22 },
+        { id: 130, nombre: "Quinta Los Tilos", departamento: "Andalgalá", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 5 },
+        { id: 131, nombre: "Residencial Tynku", departamento: "Andalgalá", categoria: "Residencial Sin Categoría", plazasDeclaradas: 32 },
+        { id: 132, nombre: "Cabañas Los Nogales del Huayco", departamento: "Andalgalá", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 25 },
+        { id: 133, nombre: "Cabañas Julumao", departamento: "Andalgalá", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 14 },
+        { id: 134, nombre: "Cabañas El Tata", departamento: "Andalgalá", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 49 },
+        { id: 135, nombre: "Cabañas Alfonso 1°", departamento: "Andalgalá", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 35 },
+        { id: 136, nombre: "Cabañas Aldea del Sol", departamento: "Andalgalá", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 27 },
+        { id: 137, nombre: "Hostería Refugio del Minero", departamento: "Andalgalá", categoria: "Hostería Sin Categoría", plazasDeclaradas: 32 },
+        { id: 138, nombre: "Estancia Condado de Huasán", departamento: "Andalgalá", categoria: "Hostería Sin Categoría", plazasDeclaradas: 17 },
+        { id: 139, nombre: "Hotel Belén", departamento: "Belén", categoria: "Hotel 3 Estrellas", plazasDeclaradas: 109 },
+        { id: 140, nombre: "Las Cardas Posada y Spa", departamento: "Belén", categoria: "Posada (Hostería 3 Estrella)", plazasDeclaradas: 15 },
+        { id: 141, nombre: "Hotel Angelica", departamento: "Belén", categoria: "Hotel Sin Categoría", plazasDeclaradas: 40 },
+        { id: 142, nombre: "Hotel Gomez", departamento: "Belén", categoria: "Hotel Sin Categoría", plazasDeclaradas: 46 },
+        { id: 143, nombre: "Hotel Wisz-V", departamento: "Belén", categoria: "Hotel Sin Categoría", plazasDeclaradas: 41 },
+        { id: 144, nombre: "Cabañas El Recuerdo", departamento: "Belén", categoria: "Cabañas 1 Estrella", plazasDeclaradas: 65 },
+        { id: 145, nombre: "La Vieja Antena", departamento: "Belén", categoria: "Departamento", plazasDeclaradas: 12 },
+        { id: 146, nombre: "Hostel Estación 40", departamento: "Belén", categoria: "Hostels", plazasDeclaradas: 14 },
+        { id: 147, nombre: "Hostel Villa San Ignacio", departamento: "Belén", categoria: "Hostels", plazasDeclaradas: 25 },
+        { id: 148, nombre: "El Belichito", departamento: "Belén", categoria: "Alquiler Temporario", plazasDeclaradas: 13 },
+        { id: 149, nombre: "Hospedaje Shaka Ekeikey", departamento: "Belén", categoria: "Alquiler Temporario", plazasDeclaradas: 24 },
+        { id: 150, nombre: "Huaco Casa de Campo", departamento: "Belén", categoria: "Alquiler Temporario", plazasDeclaradas: 10 },
+        { id: 151, nombre: "Belén Apart Hotel", departamento: "Belén", categoria: "Alquiler Temporario", plazasDeclaradas: 25 },
+        { id: 152, nombre: "Hostería Municipal de Corral Quemado", departamento: "Belén", categoria: "Hostería Sin Categoría", plazasDeclaradas: 20 },
+        { id: 153, nombre: "Hostería Municipal Cacique Juan Chelemín", departamento: "Belén", categoria: "Hostería Sin Categoría", plazasDeclaradas: 21 },
+        { id: 154, nombre: "Hospedaje Alta Huasi", departamento: "Belén", categoria: "Hospedaje", plazasDeclaradas: 16 },
+        { id: 155, nombre: "Hostal La Nona", departamento: "Belén", categoria: "Hostals", plazasDeclaradas: 12 },
+        { id: 156, nombre: "Cabañas El Shincal", departamento: "Belén", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 18 },
+        { id: 157, nombre: "Hospedaje Aldea Tierra Eco", departamento: "Belén", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 13 },
+        { id: 158, nombre: "Hospedaje Las Cañas", departamento: "Belén", categoria: "Hospedaje", plazasDeclaradas: 17 },
+        { id: 159, nombre: "Munay Complejo Ecoturistico", departamento: "Belén", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 5 },
+        { id: 160, nombre: "Hostería Puerta De Corral Quemado", departamento: "Belén", categoria: "Hostería Sin Categoría", plazasDeclaradas: 32 },
+        { id: 161, nombre: "Hostería Municipal El Durazno", departamento: "Belén", categoria: "Hostería Sin Categoría", plazasDeclaradas: 14 },
+        { id: 162, nombre: "Complejo Turístico Agua Clara", departamento: "Belén", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 30 },
+        { id: 163, nombre: "Hostería Oeste Paraíso", departamento: "Belén", categoria: "Hostería Sin Categoría", plazasDeclaradas: 32 },
+        { id: 164, nombre: "El Remenizo Cabaña de Montaña", departamento: "Belén", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 10 },
+        { id: 165, nombre: "Hospedaje Coquena", departamento: "Belén", categoria: "Hospedaje", plazasDeclaradas: 16 },
+        { id: 166, nombre: "Hostería de Villa Vil", departamento: "Belén", categoria: "Hostería Sin Categoría", plazasDeclaradas: 9 },
+        { id: 167, nombre: "Hostería Pirucha", departamento: "Belén", categoria: "Hostería Sin Categoría", plazasDeclaradas: 40 },
+        { id: 168, nombre: "Hostal Carlota Vázquez", departamento: "Belén", categoria: "Hostals", plazasDeclaradas: 7 },
+        { id: 169, nombre: "Albergue Municipal Villa Vil", departamento: "Belén", categoria: "Albergue", plazasDeclaradas: 33 },
+        { id: 170, nombre: "Abaucan Hotel & Spa", departamento: "Tinogasta", categoria: "Hotel Sin Categoría", plazasDeclaradas: 40 },
+        { id: 171, nombre: "Hostería Santa Rita", departamento: "Tinogasta", categoria: "Hostería Sin Categoría", plazasDeclaradas: 30 },
+        { id: 172, nombre: "Hostería San Carlos", departamento: "Tinogasta", categoria: "Hostería Sin Categoría", plazasDeclaradas: 25 },
+        { id: 173, nombre: "Hostería CEL-HAY San Pedro", departamento: "Tinogasta", categoria: "Hostería Sin Categoría", plazasDeclaradas: 43 },
+        { id: 174, nombre: "Hotel Umbral de la Luna", departamento: "Tinogasta", categoria: "Hostería Sin categoría", plazasDeclaradas: 24 },
+        { id: 175, nombre: "JR Hotel", departamento: "Tinogasta", categoria: "Hotel Sin Categoría", plazasDeclaradas: 23 },
+        { id: 176, nombre: "Hotel Cortaderas", departamento: "Tinogasta", categoria: "Hotel Sin Categoría", plazasDeclaradas: 100 },
+        { id: 177, nombre: "Tejada Hotel", departamento: "Tinogasta", categoria: "Hotel Sin Categoría", plazasDeclaradas: 25 },
+        { id: 178, nombre: "Hotel Boutique Casona del Pino", departamento: "Tinogasta", categoria: "Hostería 2 Estrellas", plazasDeclaradas: 12 },
+        { id: 179, nombre: "Hotel San Francisco", departamento: "Tinogasta", categoria: "Hotel Sin Categoría", plazasDeclaradas: 62 },
+        { id: 180, nombre: "Cabañas Pissis", departamento: "Tinogasta", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 32 },
+        { id: 181, nombre: "Cabañas Portal De La Cordillera", departamento: "Tinogasta", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 50 },
+        { id: 182, nombre: "Las Cabañas Aire de Los Andes", departamento: "Tinogasta", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 40 },
+        { id: 183, nombre: "Cabañas Dunas de Medanitos", departamento: "Tinogasta", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 35 },
+        { id: 184, nombre: "Cabañas Tunay", departamento: "Tinogasta", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 50 },
+        { id: 185, nombre: "Cabañas Piamwalla", departamento: "Tinogasta", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 8 },
+        { id: 186, nombre: "Dunas de Fiambalá Cabañas", departamento: "Tinogasta", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 16 },
+        { id: 187, nombre: "Cabañas Abaucán", departamento: "Tinogasta", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 13 },
+        { id: 188, nombre: "Residencial Doña Goyita", departamento: "Tinogasta", categoria: "Residencial Sin Categoría", plazasDeclaradas: 11 },
+        { id: 189, nombre: "Doña Pocha", departamento: "Tinogasta", categoria: "Residencial Sin Categoría", plazasDeclaradas: 35 },
+        { id: 190, nombre: "Posada Las Cañas", departamento: "Tinogasta", categoria: "Posada", plazasDeclaradas: 15 },
+        { id: 191, nombre: "La Ramadita Posada Rural", departamento: "Tinogasta", categoria: "Posada", plazasDeclaradas: 15 },
+        { id: 192, nombre: "Hospedaje Las Termas", departamento: "Tinogasta", categoria: "Hospedaje", plazasDeclaradas: 14 },
+        { id: 193, nombre: "Posada Killa Qullqui", departamento: "Tinogasta", categoria: "Posada", plazasDeclaradas: 6 },
+        { id: 194, nombre: "Hospedaje San Jorge", departamento: "Tinogasta", categoria: "Hospedaje", plazasDeclaradas: 21 },
+        { id: 195, nombre: "A Las Termas", departamento: "Tinogasta", categoria: "Cabañas", plazasDeclaradas: 6 },
+        { id: 196, nombre: "El Rancho del Motoquero Medanos de Fiambala", departamento: "Tinogasta", categoria: "Hospedaje", plazasDeclaradas: 13 },
+        { id: 197, nombre: "Hotel de Turismo Tinogasta", departamento: "Tinogasta", categoria: "Hotel 2 Estrellas", plazasDeclaradas: 69 },
+        { id: 198, nombre: "Hotel de Adobe Casa Grande", departamento: "Tinogasta", categoria: "Hotel Sin Categoría", plazasDeclaradas: 30 },
+        { id: 199, nombre: "Nicolás Tinogasta Hotel", departamento: "Tinogasta", categoria: "Hotel 2 Estrellas", plazasDeclaradas: 48 },
+        { id: 200, nombre: "Andes Xtreme Hotel Boutique", departamento: "Tinogasta", categoria: "Hotel Boutique", plazasDeclaradas: 20 },
+        { id: 201, nombre: "Residencial El Viajante", departamento: "Tinogasta", categoria: "Residencial Sin Categoría", plazasDeclaradas: 24 },
+        { id: 202, nombre: "Residencial El Emperador", departamento: "Tinogasta", categoria: "Residencial Sin Categoría", plazasDeclaradas: 50 },
+        { id: 203, nombre: "Hostal Las Parinas", departamento: "Tinogasta", categoria: "Hostals", plazasDeclaradas: 14 },
+        { id: 204, nombre: "Hostal Sante", departamento: "Tinogasta", categoria: "Hostals", plazasDeclaradas: 28 },
+        { id: 205, nombre: "Cabañas El Arrebol", departamento: "Tinogasta", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 17 },
+        { id: 206, nombre: "Hostería Novel", departamento: "Tinogasta", categoria: "Hostería Sin Categoría", plazasDeclaradas: 20 },
+        { id: 207, nombre: "Hostal Sisabel", departamento: "Tinogasta", categoria: "Hostals", plazasDeclaradas: 18 },
+        { id: 208, nombre: "Cabañas Zorro Gris", departamento: "Tinogasta", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 24 },
+        { id: 209, nombre: "Complejo Termal La Aguadita", departamento: "Tinogasta", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 0 },
+        { id: 210, nombre: "Casa de Campo El Solar de los Olivos", departamento: "Tinogasta", categoria: "Casa de Campo", plazasDeclaradas: 15 },
+        { id: 211, nombre: "Hostería Antigal", departamento: "Tinogasta", categoria: "Hostería Sin Categoría", plazasDeclaradas: 6 },
+        { id: 212, nombre: "Finca La Sala", departamento: "Tinogasta", categoria: "Hotel Boutique", plazasDeclaradas: 15 },
+        { id: 213, nombre: "Casa Blanca", departamento: "Tinogasta", categoria: "Alojamiento", plazasDeclaradas: 23 },
+        { id: 214, nombre: "Posada Los Orquera", departamento: "Tinogasta", categoria: "Cabañas 1 Estrella", plazasDeclaradas: 23 },
+        { id: 215, nombre: "El Viejo Algarrobo", departamento: "Tinogasta", categoria: "Cabañas Sin categoría", plazasDeclaradas: 10 },
+        { id: 216, nombre: "Hotel Inti Huaico", departamento: "Santa María", categoria: "Hotel 2 Estrellas", plazasDeclaradas: 81 },
+        { id: 217, nombre: "Hotel Plaza", departamento: "Santa María", categoria: "Hotel 1 Estrella", plazasDeclaradas: 25 },
+        { id: 218, nombre: "Hotel Curuzú Gil", departamento: "Santa María", categoria: "Hotel 1 Estrella", plazasDeclaradas: 42 },
+        { id: 219, nombre: "Hotel de Turismo Cielos del Oeste", departamento: "Santa María", categoria: "Hotel sin categoría", plazasDeclaradas: 37 },
+        { id: 220, nombre: "Hotel Del Valle", departamento: "Santa María", categoria: "Hotel Sin Categoría", plazasDeclaradas: 50 },
+        { id: 221, nombre: "Hotel Amancay", departamento: "Santa María", categoria: "Hotel Sin Categoría", plazasDeclaradas: 22 },
+        { id: 222, nombre: "C.A.A.SA.MA. Hotel", departamento: "Santa María", categoria: "Hotel Sin Categoría", plazasDeclaradas: 66 },
+        { id: 223, nombre: "Apart Hotel El Algarrobo", departamento: "Santa María", categoria: "Apart Hotel", plazasDeclaradas: 76 },
+        { id: 224, nombre: "Don Andres", departamento: "Santa María", categoria: "Departamento", plazasDeclaradas: 22 },
+        { id: 225, nombre: "Cabañas Viento Ocre", departamento: "Santa María", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 25 },
+        { id: 226, nombre: "Cabañas Valles Calchaquíes", departamento: "Santa María", categoria: "Cabañas 2 Estrellas", plazasDeclaradas: 32 },
+        { id: 227, nombre: "Cabañas Torres de Sol", departamento: "Santa María", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 16 },
+        { id: 228, nombre: "Cabañas El Sosiego Lodge", departamento: "Santa María", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 55 },
+        { id: 229, nombre: "Cabañas Arco Iris", departamento: "Santa María", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 12 },
+        { id: 230, nombre: "Cabañas Achalay", departamento: "Santa María", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 10 },
+        { id: 231, nombre: "Residencial Pérez", departamento: "Santa María", categoria: "Residencial Sin Categoría", plazasDeclaradas: 9 },
+        { id: 232, nombre: "Apart El Árbol De La Vida", departamento: "Santa María", categoria: "Apart Hotel", plazasDeclaradas: 16 },
+        { id: 233, nombre: "Residencial JI", departamento: "Santa María", categoria: "Residencial Categoría B", plazasDeclaradas: 13 },
+        { id: 234, nombre: "Hostel Camping El Sol", departamento: "Santa María", categoria: "Hostels", plazasDeclaradas: 24 },
+        { id: 235, nombre: "Hostal Ítalo", departamento: "Santa María", categoria: "Hostels", plazasDeclaradas: 60 },
+        { id: 236, nombre: "Residencial Atencio", departamento: "Pomán", categoria: "Residencial Sin Categoría", plazasDeclaradas: 20 },
+        { id: 237, nombre: "Hostal Pomanti", departamento: "Pomán", categoria: "Hostals", plazasDeclaradas: 30 },
+        { id: 238, nombre: "Cabañas Rosario de Colana", departamento: "Pomán", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 12 },
+        { id: 239, nombre: "Hotel Olivos de Poman", departamento: "Pomán", categoria: "Hotel Sin Categoría", plazasDeclaradas: 60 },
+        { id: 240, nombre: "Cabañas Huayra Suma", departamento: "Pomán", categoria: "Cabañas Sin Categoría", plazasDeclaradas: 18 },
+        { id: 241, nombre: "Hostería Mika", departamento: "Pomán", categoria: "Hostería 1 Estrella", plazasDeclaradas: 22 },
+        { id: 242, nombre: "Hostal Doña Dolores", departamento: "Pomán", categoria: "Hostals", plazasDeclaradas: 12 }
+    ];
 
-    let alojamientosGlobal = [];
+    // ============================================================
+    // VARIABLES GLOBALES
+    // ============================================================
     let alojamientoSeleccionado = null;
     let alojamientosFiltrados = [];
 
     // ============================================================
-    // 1. CARGAR ALOJAMIENTOS DESDE GOOGLE SHEETS (doGet)
+    // URL DEL SCRIPT DE GOOGLE - ¡CAMBIAR POR TU URL!
     // ============================================================
-    async function cargarAlojamientos() {
-        try {
-            const response = await fetch(SCRIPT_URL, { method: 'GET', mode: 'cors' });
-            const data = await response.json();
-            
-            if (data.error) {
-                throw new Error(data.error);
-            }
-            
-            alojamientosGlobal = data;
-            console.log('✅ Alojamientos cargados:', alojamientosGlobal.length);
-            
-            // Llenar el filtro de departamentos
-            cargarFiltroDepartamentos();
-            // Llenar el select de alojamientos con todos
-            filtrarAlojamientos();
-            
-        } catch (error) {
-            console.error('❌ Error al cargar alojamientos:', error);
-            document.getElementById('alojamientoSelect').innerHTML = '<option value="">❌ Error al cargar datos</option>';
-            document.getElementById('mensajeFeedback').innerHTML = `<div class="mensaje-error">⚠️ No se pudieron cargar los alojamientos. Verifica la URL del script y que la hoja "Alojamientos" exista.</div>`;
-        }
-    }
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyiCKBUIY9d5A80gEpfJRlX8M3aKyIpUiaRVTxU_egM13ej2tQHJPEFKWsXEzzcQjQ/exec";
 
     // ============================================================
-    // 2. FUNCIONES DE FILTRADO Y SELECCIÓN (igual que antes)
+    // FUNCIONES DEL FORMULARIO
     // ============================================================
+
     function obtenerDepartamentos() {
-        const deptos = [...new Set(alojamientosGlobal.map(a => a.departamento))];
+        const deptos = [...new Set(alojamientosDB.map(a => a.departamento))];
         return deptos.sort();
     }
 
     function cargarFiltroDepartamentos() {
         const filtroSelect = document.getElementById('filtroDepartamento');
         const departamentos = obtenerDepartamentos();
+        
         filtroSelect.innerHTML = '<option value="todos">-- Todos los departamentos --</option>';
         departamentos.forEach(depto => {
             const option = document.createElement('option');
@@ -229,9 +860,9 @@
         const contadorDiv = document.getElementById('contadorAlojamientos');
         
         if (deptoSeleccionado === 'todos') {
-            alojamientosFiltrados = [...alojamientosGlobal];
+            alojamientosFiltrados = [...alojamientosDB];
         } else {
-            alojamientosFiltrados = alojamientosGlobal.filter(a => a.departamento === deptoSeleccionado);
+            alojamientosFiltrados = alojamientosDB.filter(a => a.departamento === deptoSeleccionado);
         }
         
         alojamientosFiltrados.sort((a, b) => a.nombre.localeCompare(b.nombre));
@@ -240,7 +871,7 @@
         alojamientosFiltrados.forEach(alo => {
             const option = document.createElement('option');
             option.value = alo.id;
-            option.textContent = `${alo.nombre} - ${alo.plazas} plazas`;
+            option.textContent = `${alo.nombre} - ${alo.plazasDeclaradas} plazas`;
             selectAlojamiento.appendChild(option);
         });
         
@@ -264,9 +895,6 @@
         document.getElementById('botonEnviarGroup').style.display = 'none';
     }
 
-    // ============================================================
-    // 3. MOSTRAR ALOJAMIENTO SELECCIONADO
-    // ============================================================
     function buscarYMostrarAlojamiento() {
         const select = document.getElementById('alojamientoSelect');
         const idSeleccionado = parseInt(select.value);
@@ -276,7 +904,7 @@
             return;
         }
         
-        const encontrado = alojamientosGlobal.find(alo => alo.id === idSeleccionado);
+        const encontrado = alojamientosDB.find(alo => alo.id === idSeleccionado);
         if (!encontrado) {
             alert('Alojamiento no encontrado');
             return;
@@ -286,7 +914,7 @@
         
         document.getElementById('departamentoAuto').innerText = encontrado.departamento;
         document.getElementById('categoriaAuto').innerText = encontrado.categoria || 'Sin categoría';
-        document.getElementById('plazasDisponiblesAuto').innerText = encontrado.plazas;
+        document.getElementById('plazasDisponiblesAuto').innerText = encontrado.plazasDeclaradas;
         
         document.getElementById('infoAlojamiento').style.display = 'block';
         document.getElementById('zonaGroup').style.display = 'block';
@@ -295,14 +923,16 @@
         document.getElementById('emailGroup').style.display = 'block';
         document.getElementById('botonEnviarGroup').style.display = 'block';
         
-        // Limpiar campos previos
         const radios = document.querySelectorAll('input[name="zona"]');
         radios.forEach(radio => radio.checked = false);
+        
         document.getElementById('fechaInicio').value = '';
         document.getElementById('fechaFin').value = '';
         document.getElementById('totalPernoctaciones').value = '';
         document.getElementById('emailCarga').value = '';
-        document.getElementById('mensajeFeedback').innerHTML = '';
+        
+        const msgDiv = document.getElementById('mensajeFeedback');
+        msgDiv.innerHTML = '';
     }
 
     function calcularDias() {
@@ -319,7 +949,7 @@
     }
 
     // ============================================================
-    // 4. ENVIAR DATOS (igual que antes, pero con categoría)
+    // FUNCIÓN PARA ENVIAR DATOS - CON no-cors
     // ============================================================
     async function enviarASheets() {
         if (!alojamientoSeleccionado) {
@@ -353,9 +983,9 @@
             return;
         }
         
-        const maximoPosible = alojamientoSeleccionado.plazas * dias;
+        const maximoPosible = alojamientoSeleccionado.plazasDeclaradas * dias;
         if (totalPernoctaciones > maximoPosible) {
-            alert(`El total de pernoctaciones (${totalPernoctaciones}) no puede superar las plazas disponibles (${alojamientoSeleccionado.plazas}) multiplicadas por los ${dias} días del período (máximo ${maximoPosible}).`);
+            alert(`El total de pernoctaciones (${totalPernoctaciones}) no puede superar las plazas disponibles (${alojamientoSeleccionado.plazasDeclaradas}) multiplicadas por los ${dias} días del período (máximo ${maximoPosible}).`);
             return;
         }
         
@@ -367,12 +997,11 @@
         
         const zona = zonaSeleccionada.value;
         
-        // Construir objeto con los datos (incluyendo categoría)
         const registro = {
             alojamiento: alojamientoSeleccionado.nombre,
             departamento: alojamientoSeleccionado.departamento,
             zona: zona,
-            plazas_disponibles_declaradas: alojamientoSeleccionado.plazas,
+            plazas_disponibles_declaradas: alojamientoSeleccionado.plazasDeclaradas,
             fecha_inicio: fechaInicio,
             fecha_fin: fechaFin,
             cantidad_dias: dias,
@@ -381,7 +1010,7 @@
             categoria: alojamientoSeleccionado.categoria || 'Sin categoría'
         };
         
-        console.log('📤 Enviando:', JSON.stringify(registro));
+        console.log('📤 Enviando datos:', JSON.stringify(registro));
         
         const btn = document.getElementById('btnEnviar');
         const textoOriginal = btn.innerText;
@@ -392,11 +1021,13 @@
             const response = await fetch(SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                },
                 body: JSON.stringify(registro)
             });
             
-            console.log('✅ Datos enviados (no-cors)');
+            console.log('✅ Datos enviados correctamente (no-cors)');
             
             const mensajeDiv = document.getElementById('mensajeFeedback');
             mensajeDiv.innerHTML = `<div class="mensaje-exito">✅ Datos enviados correctamente.<br> 
@@ -405,7 +1036,6 @@
             <strong>Categoría:</strong> ${registro.categoria}<br>
             <span style="font-size:0.8rem; color:#5b6f82;">📌 Verifique en Google Sheets que los datos se hayan guardado.</span></div>`;
             
-            // Limpiar campos
             document.querySelectorAll('input[name="zona"]').forEach(r => r.checked = false);
             document.getElementById('fechaInicio').value = '';
             document.getElementById('fechaFin').value = '';
@@ -422,14 +1052,14 @@
     }
 
     // ============================================================
-    // 5. EVENTOS E INICIALIZACIÓN
+    // EVENTOS E INICIALIZACIÓN
     // ============================================================
     document.getElementById('filtroDepartamento').addEventListener('change', filtrarAlojamientos);
     document.getElementById('btnBuscar').addEventListener('click', buscarYMostrarAlojamiento);
     document.getElementById('btnEnviar').addEventListener('click', enviarASheets);
     
-    // Cargar alojamientos al iniciar
-    cargarAlojamientos();
+    cargarFiltroDepartamentos();
+    filtrarAlojamientos();
 </script>
 </body>
 </html>
