@@ -949,7 +949,7 @@
     }
 
     // ============================================================
-    // FUNCIÓN PARA ENVIAR DATOS - CON no-cors
+    // FUNCIÓN PARA ENVIAR DATOS - CON CATEGORÍA TOMADA DEL DOM
     // ============================================================
     async function enviarASheets() {
         if (!alojamientoSeleccionado) {
@@ -997,6 +997,13 @@
         
         const zona = zonaSeleccionada.value;
         
+        // ============================================================
+        // OBTENER CATEGORÍA DIRECTAMENTE DEL ELEMENTO HTML
+        // (ESTO RESUELVE EL PROBLEMA)
+        // ============================================================
+        const categoriaMostrada = document.getElementById('categoriaAuto').innerText;
+        const categoria = categoriaMostrada !== '—' ? categoriaMostrada : 'Sin categoría';
+        
         const registro = {
             alojamiento: alojamientoSeleccionado.nombre,
             departamento: alojamientoSeleccionado.departamento,
@@ -1007,7 +1014,7 @@
             cantidad_dias: dias,
             total_pernoctaciones: totalPernoctaciones,
             email_operador: email,
-            categoria: alojamientoSeleccionado.categoria || 'Sin categoría'
+            categoria: categoria  // Ahora se toma del DOM
         };
         
         console.log('📤 Enviando datos:', JSON.stringify(registro));
@@ -1033,7 +1040,7 @@
             mensajeDiv.innerHTML = `<div class="mensaje-exito">✅ Datos enviados correctamente.<br> 
             <strong>Período:</strong> ${fechaInicio} a ${fechaFin} (${dias} días) | 
             <strong>Pernoctaciones:</strong> ${totalPernoctaciones}<br>
-            <strong>Categoría:</strong> ${registro.categoria}<br>
+            <strong>Categoría:</strong> ${categoria}<br>
             <span style="font-size:0.8rem; color:#5b6f82;">📌 Verifique en Google Sheets que los datos se hayan guardado.</span></div>`;
             
             document.querySelectorAll('input[name="zona"]').forEach(r => r.checked = false);
